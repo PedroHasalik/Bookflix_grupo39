@@ -1,4 +1,23 @@
 {% extends "layout.html"%}
 {% block content %}
-    <h1> Página principal </h1>
+    {% for new in news.items %}
+     <article class="media content-section">
+        <div class="media-body">
+          <div class="article-metadata">
+            <!-- a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username)}}">{{ post.author.username }} -->
+            <small class="text-muted">{{ new.date_posted.strftime('%Y-%m-%d') }}</small>
+          </div>
+          <h2><a class="article-title" href="#">{{ new.title }}</a></h2>
+          <p class="article-content">{{ new.content }}</p>
+          <!-- <img class=""> Acá iría la imagen del libro de la novedad -->
+        </div>
+     </article>
+    {% endfor %}
+
+    <!-- Modifiqué el home para que muestre las hipoteticas
+    novedades. Si quieren que haga un template aparte, avisenme
+
+                                                -Enzo
+    -->
+   
 {% endblock content %}

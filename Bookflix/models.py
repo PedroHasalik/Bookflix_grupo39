@@ -60,3 +60,12 @@ class Review(db.Model):
     score=db.Column(db.Integer, nullable= False)
     text=db.Column(db.Text, nullable= True)
 
+class News(db.Model):
+    id =db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(40), nullable= False)
+    content = db.Column(db.String(140), nullable= False)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    image_file =  image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+
+
+
