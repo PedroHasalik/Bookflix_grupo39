@@ -1,0 +1,41 @@
+{% extends "layout.html"%}
+{% block content %}
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" href="{{ url_for('news.new')}}">{{ new.title }}</a>
+                <small class="text-muted">{{ new.date_posted.strftime('%Y-%m-%d') }}</small>
+                {% if post.author == current_user %} <!-- Acá debería comparar con admin -->
+                    <div>
+                        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('news.update_new', new_id=new.id) }}">Modificar</a>
+                        <button type="button" class="btn btn-danger btn-sm m-1" data-toggle='modal' data-target="#deleteModal">Eliminar</button>
+                    </div>
+                {% endif %}
+            </div>
+            <h2 class="article-title">{{ new.title }}</h2>
+            <p class="article-content">{{ new.content }}</p>
+            {% if new.image_file != 'default.jpg' %} <!-- El objetivo de esta línea es mostrar una imagen si no es default.jpg -->
+                <img src="{{ new.image_file }}" >
+            {% endif %}
+        </div>
+    </article>
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Se eliminará la novedad. ¿Estás seguro?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <form action="{{ url_for('news.delete_new', new_id=new.id) }}" method="POST">
+                        <input class="btn btn-danger" type="submit" value="Delete">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

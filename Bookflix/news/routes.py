@@ -18,7 +18,7 @@ def new_new():
         db.session.commit()
         flash('La novedad ha sido creada.', 'success')
         return redirect(url_for('main.home'))
-    return render_template('create_new.html', title= 'New new', form=form, legend='New new')
+    return render_template('create_new.html', title= 'Nueva novedad', form=form, legend='Nueva novedad')
 
 @news.route("/news/<int:new_id>")
 def new(new_id):
@@ -28,7 +28,7 @@ def new(new_id):
 @news.route("/new/<int:new_id>/update",  methods=['GET', 'POST'])
 @login_required
 def update_new(new_id):
-    new = new.query.get_or_404(new_id)
+    new = News.query.get_or_404(new_id)
     if new.author != current_user:
         abort(403) #Hay que cambiar esto; lógica: si no sos admin no podés.
     
@@ -36,6 +36,7 @@ def update_new(new_id):
     if form.validate_on_submit():
         new.title = form.title.data
         new.content = form.content.data
+        new.image_file = form.picture.data
         db.session.commit()
         flash('Novedad modificada.', 'success')
         return redirect(url_for('news.new', new_id=new.id))
@@ -49,7 +50,7 @@ def update_new(new_id):
 @news.route("/new/<int:new_id>/delete",  methods=['POST'])
 @login_required
 def delete_new(new_id):
-    new = new.query.get_or_404(new_id)
+    new = News.query.get_or_404(new_id)
     if new.author != current_user:
         abort(403)
     db.session.delete(new)
