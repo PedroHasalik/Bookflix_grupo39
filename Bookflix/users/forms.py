@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, RadioField
+from wtforms.fields.html5 import DateField  
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flask_login import current_user
 from Bookflix.models import User
@@ -9,11 +10,11 @@ from Bookflix.models import User
 class RegistrationForm(FlaskForm):
     username = StringField('Username',validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email',validators=[DataRequired(), Email()])
-    number = StringField('Number', validators=[DataRequired(), Number()])
-    expDate = StringField(  'ExpDate' , validators=[DataRequired, ExpDate()])
-    securityNum =  StringField( 'SecurityNumber' , validators=[DataRequired, SecurityNumber()]  )                                           
+    number = IntegerField('CardNumber', validators=[DataRequired()])
+    expDate = DateField('ExpDate' ,format='%Y-%m-%d' ,validators=[DataRequired,])
+    securityNum =  IntegerField( 'SecurityNumber' , validators=[DataRequired])                                           
     password = PasswordField('Password', validators=[DataRequired()])
-    userType =  RadioField('UserType', choices=[('Premiun','usarioPremium'),('Normal','usuarioNormal')])
+    userType =  RadioField('UserType', choices=[('Premiun','Premium'),('Normal','Normal')])
     submit = SubmitField('Sign Up')
 
     def validate_username(self, username):
@@ -27,8 +28,7 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('That email is taken. Please choose a different one.')
 
 class LoginForm(FlaskForm):
-    email = StringField('Email',
-                        validators=[DataRequired(), Email()])
+    username = StringField('Username',validators=[DataRequired(), Length(min=2, max=20)])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')

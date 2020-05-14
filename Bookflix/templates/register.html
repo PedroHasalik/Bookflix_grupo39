@@ -14,53 +14,56 @@
 				<h3>Crear usuario</h3>
 			</div>
 			<div class="card-body">
-				<form>
+				<form method="POST" action="">
+					{{ form.hidden_tag() }}
 					<div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-user"></i></span>
 						</div>
-						<input type="text" class="form-control" placeholder="Nombre de usuario">
+						{{ form.username(class="form-control", placeholder="Nombre de usuario") }}
                     </div>
                     <div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
 						</div>
-						<input type="text" class="form-control" placeholder="Email">
+						{{ form.email(class="form-control", placeholder="Email") }}
                     </div>
                     <div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-credit-card"></i></span>
 						</div>
-						<input type="text" class="form-control" placeholder="Numero de tarjeta">
+						{{ form.number(class="form-control", placeholder="Numero de tarjeta") }}
                     </div>
                     <div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-credit-card"></i></span>
 						</div>
-						<input type="text" class="form-control" placeholder="Numero de seguridad">
+						{{ form.securityNum(class="form-control", placeholder="Numero de seguridad") }}
                     </div>
                     <div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="far fa-calendar-alt"></i></i></span>
 						</div>
-						<input type="date" class="form-control" placeholder="Fecha vencimiento">
+						{{ form.expDate(class="form-control") }}
 					</div>
 					<div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-key"></i></span>
 						</div>
-						<input type="password" class="form-control" placeholder="Contrasenia">
+						{{ form.password(class="form-control",  placeholder="Contraseña") }}
 					</div>
 					<h5 class="rb">Plan premiun: $100 X mes</h5>
 					<h5 class="rb">Plan normal: $50 X mes</h5>
                     <div class="form-group">
-                        <input type="radio"  name="tipo" value="premiun">
-                        <label for="premiun" class="rb">Premiun</label><br>
-                        <input type="radio"  name="tipo" value="normal">
-                        <label for="normal" class="rb">Normal</label><br>
+                        {% for subfield in form.userType %}
+							<tr>
+								<td>{{ subfield }}</td>
+								<td>{{ subfield.label (class='rb') }}</td>
+							</tr>
+							{% endfor %}
                     </div>
 					<div class="form-group">
-						<input type="submit" value="Crear" class="btn float-right login_btn">
+						{{ form.submit(class="btn float-right login_btn") }}
 					</div>
 				</form>
 			</div>

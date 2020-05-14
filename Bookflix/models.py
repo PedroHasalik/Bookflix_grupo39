@@ -28,9 +28,7 @@ class Profile(db.Model,UserMixin):
 
 class Card(db.Model):
     id=db.Column(db.Integer, primary_key = True)
-    number=db.Column(db.Integer, nullable= False)
-    expDate=db.Column(db.DateTime, nullable = False)
-    securityNum=db.Column(db.Integer, nullable= False)
+    
     ownerName= db.Column(db.String, nullable= False)
 
 class Book(db.Model):
