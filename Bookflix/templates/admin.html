@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="content-section">
+        <a class="btn btn-outline-info" href="{{ url_for('admin.genre_list') }}">Generos</a>
+        <a class="btn btn-outline-info" href="{{ url_for('admin.author_list') }}">Autores</a>
+        <a class="btn btn-outline-info" href="{{ url_for('admin.publisher_list') }}">Editoriales</a>
+        <a class="btn btn-outline-info" href="{{ url_for('admin.book_list') }}">Libros</a>
+        <a class="btn btn-outline-info" href="{{ url_for('admin.news_list') }}">Novedades</a>
+    </div>
+{% endblock content %}

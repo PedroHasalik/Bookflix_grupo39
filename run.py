@@ -1,6 +1,4 @@
-import sys
-from Bookflix import create_app
-from flask import Flask, render_template
+from bookflix import create_app
 
 app = create_app()
 
