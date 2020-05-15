@@ -5,7 +5,7 @@
             <div class="article-metadata">
                 <a class="mr-2" href="{{ url_for('news.new')}}">{{ new.title }}</a>
                 <small class="text-muted">{{ new.date_posted.strftime('%Y-%m-%d') }}</small>
-                {% if post.author == current_user %} <!-- Acá debería comparar con admin -->
+                {% if current_user.owner.accountType == "Admin" %} <!-- Acá debería comparar con admin -->
                     <div>
                         <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('news.update_new', new_id=new.id) }}">Modificar</a>
                         <button type="button" class="btn btn-danger btn-sm m-1" data-toggle='modal' data-target="#deleteModal">Eliminar</button>

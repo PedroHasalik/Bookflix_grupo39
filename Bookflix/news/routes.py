@@ -1,15 +1,16 @@
 from flask import render_template, url_for, flash, redirect, request, abort, Blueprint
 from flask_login import current_user, login_required
-from flaskblog import db
-from flaskblog.models import News
-from flaskblog.news.forms import NewsForm
+from bookflix import db
+from bookflix.models import News
+from bookflix.news.forms import NewsForm
+from bookflix.decorators import admin_required
 
 news = Blueprint('news', __name__)
 
 #Estas rutas solo podrán ser utilizadas por el administrador.
 
 @news.route('/news/create_new', methods=['GET', 'POST'])
-@login_required #(Admin)
+@admin_required
 def new_new():
     form = NewsForm()
     if form.validate_on_submit():
@@ -26,12 +27,9 @@ def new(new_id):
     return render_template ('new.html', title=new.title, new=new)
 
 @news.route("/new/<int:new_id>/update",  methods=['GET', 'POST'])
-@login_required
+@admin_required
 def update_new(new_id):
     new = News.query.get_or_404(new_id)
-    if new.author != current_user:
-        abort(403) #Hay que cambiar esto; lógica: si no sos admin no podés.
-    
     form = NewsForm()
     if form.validate_on_submit():
         new.title = form.title.data
@@ -48,7 +46,7 @@ def update_new(new_id):
 
 
 @news.route("/new/<int:new_id>/delete",  methods=['POST'])
-@login_required
+@admin_required
 def delete_new(new_id):
     new = News.query.get_or_404(new_id)
     if new.author != current_user:
