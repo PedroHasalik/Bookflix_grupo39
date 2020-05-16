@@ -33,25 +33,41 @@ class Card(db.Model):
 
 class Book(db.Model):
     id=db.Column(db.Integer, primary_key = True)
+    title= db.Column(db.String, nullable = False)
     pdf_file= db.Column(db.String(20), nullable = False)
-    image_file= db.Column(db.String(20), nullable = False)
+    image_file= db.Column(db.String(20), nullable = False, default=)
     isTrending= db.Column(db.Boolean, nullable= False, default= False)
+
     author=db.relationship('Author',lazy = True)
     genre=db.relationship('Genre',lazy = True)
     reviews=db.relationship('Review',lazy = True)
     publisher=db.relationship('Publisher',lazy = True)
 
+    def name():
+        return title
+
 class Author(db.Model):
     id=db.Column(db.Integer, primary_key = True)
-    name=db.Column(db.String(20), nullable = False)
+    name=db.Column(db.String(20), nullable = False) #Nombre
+    surname= db.Column(db.String(20)) #Apellido
+
+    def name():
+        fullName = name+' '+surname
+        return fullName
 
 class Genre(db.Model):
     id=db.Column(db.Integer, primary_key = True)
     name=db.Column(db.String(20), nullable = False)
 
+    def name():
+        return name
+
 class Publisher(db.Model):
     id=db.Column(db.Integer, primary_key = True)
     name=db.Column(db.String(20), nullable = False)
+
+    def name():
+        return name
 
 class Review(db.Model):
     id=db.Column(db.Integer, primary_key = True)

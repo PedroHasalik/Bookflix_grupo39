@@ -9,7 +9,7 @@
                 <!--<div class="article-metadata">
                 <small class="text-muted">{{ post.date_posted.strftime('%d-%m-%Y') }}</small>
                 </div>-->
-                <a class="article-metadata" href="{{ url_for('admin.edit_'+listOf, name=item.name) }}">{{ item.name }}</a>
+                <a class="article-metadata" href="{{ url_for('admin.edit_'+listOf, id=item.id }}">{{ item.name() }}</a>
             </div>
         </article>
     {% endfor %}
