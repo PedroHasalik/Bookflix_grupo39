@@ -10,7 +10,7 @@ news = Blueprint('news', __name__)
 #Estas rutas solo podrán ser utilizadas por el administrador.
 
 @news.route('/news/create_new', methods=['GET', 'POST'])
-@admin_required
+@admin_required()
 def new_new():
     form = NewsForm()
     if form.validate_on_submit():
@@ -22,12 +22,13 @@ def new_new():
     return render_template('create_new.html', title= 'Nueva novedad', form=form, legend='Nueva novedad')
 
 @news.route("/news/<int:new_id>")
+@full_login_required()
 def new(new_id):
     new = News.query.get_or_404(new_id)
     return render_template ('new.html', title=new.title, new=new)
 
 @news.route("/new/<int:new_id>/update",  methods=['GET', 'POST'])
-@admin_required
+@admin_required()
 def update_new(new_id):
     new = News.query.get_or_404(new_id)
     form = NewsForm()
@@ -46,7 +47,7 @@ def update_new(new_id):
 
 
 @news.route("/new/<int:new_id>/delete",  methods=['POST'])
-@admin_required
+@admin_required()
 def delete_new(new_id):
     new = News.query.get_or_404(new_id)
     if new.author != current_user:

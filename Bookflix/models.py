@@ -42,9 +42,16 @@ class Book(db.Model):
     genre=db.relationship('Genre',lazy = True)
     reviews=db.relationship('Review',lazy = True)
     publisher=db.relationship('Publisher',lazy = True)
+    chapters=db.relationship('Chapter', lazy = True, backref='book')
 
     def name():
         return title
+
+class Chapter(db.Model):
+    id=db.Column(db.Integer, primary_key = True)
+    chapterNumber = db.Column(db.Integer, nullable = False)
+    chapterTitle = db.Column(db.String)
+    pdf_file = db.Column(db.String, nullable = False)
 
 class Author(db.Model):
     id=db.Column(db.Integer, primary_key = True)
@@ -80,6 +87,9 @@ class News(db.Model):
     content = db.Column(db.String(140), nullable= False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     image_file =  image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+
+    def name:
+        return title
 
 
 
