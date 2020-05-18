@@ -20,10 +20,10 @@ def create_app(config_class = Config):
     login_manager.init_app(app)
 
     from Bookflix.users.routes import users
-    #from Bookflix.main.routes import main
+    from Bookflix.main.routes import main
     from Bookflix.admin.routes import admin
     app.register_blueprint(users)
-    #app.register_blueprint(main)
+    app.register_blueprint(main)
     app.register_blueprint(admin) 
 
     return app

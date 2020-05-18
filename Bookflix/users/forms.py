@@ -8,19 +8,14 @@ from Bookflix.models import User
 
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username',validators=[DataRequired(), Length(min=2, max=20)])
+    name = StringField('Name',validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email',validators=[DataRequired(), Email()])
     number = IntegerField('CardNumber', validators=[DataRequired()])
     expDate = DateField('ExpDate' ,format='%Y-%m-%d' ,validators=[DataRequired,])
     securityNum =  IntegerField( 'SecurityNumber' , validators=[DataRequired])                                           
     password = PasswordField('Password', validators=[DataRequired()])
-    userType =  RadioField('UserType', choices=[('Premiun','Premium'),('Normal','Normal')])
+    userType =  RadioField('UserType', choices=[('Premium','Premium'),('Normal','Normal')])
     submit = SubmitField('Sign Up')
-
-    def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user:
-            raise ValidationError('That username is taken. Please choose a different one.')
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
@@ -28,7 +23,7 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('That email is taken. Please choose a different one.')
 
 class LoginForm(FlaskForm):
-    username = StringField('Username',validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('email',validators=[DataRequired(), Length(min=2, max=20)])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
