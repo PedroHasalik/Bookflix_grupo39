@@ -1,9 +1,9 @@
 from flask import render_template, url_for, flash, redirect, request, abort, Blueprint
 from flask_login import current_user, login_required
-from bookflix import db
-from bookflix.models import News
-from bookflix.news.forms import NewsForm
-from bookflix.decorators import admin_required
+from Bookflix import db
+from Bookflix.models import News
+from Bookflix.news.forms import NewsForm
+from Bookflix.decorators import admin_required
 
 news = Blueprint('news', __name__)
 

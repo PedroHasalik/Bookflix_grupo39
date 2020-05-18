@@ -1,7 +1,7 @@
 from flask import render_template, request, Blueprint
-from bookflix.decorators import roles_required
-from bookflix.models import Book, Author, Genre, Publisher, News
-from bookflix.admin.forms import GenreForm, AuthorForm, PublisherForm, BookForm
+from Bookflix.decorators import full_login_required, admin_required
+from Bookflix.models import Book, Author, Genre, Publisher, News
+from Bookflix.admin.forms import GenreForm, AuthorForm, PublisherForm, BookForm
 
 admin = Blueprint('admin', __name__)
 
@@ -14,7 +14,7 @@ admin = Blueprint('admin', __name__)
 
 @admin.route("/admin")
 @admin_required()
-def admin():
+def admin_dashboard():
         return render_template('admin/admin.html', title='Admin page')
 
 
@@ -52,7 +52,7 @@ def book_list():
 def news_list():
         page = request.args.get('page', 1, type=int)
         items = news.query.all().paginate(page=page, per_page=10)
-        return render_template('admin/admin_list.html', title='Lista de Noticias', listOf = 'news', items=items))
+        return render_template('admin/admin_list.html', title='Lista de Noticias', listOf = 'news', items=items)
 
 #CREAR las cosas de la base de datos.
 @admin.route("/admin/new_genre")
@@ -95,6 +95,12 @@ def new_publisher():
 @admin_required()
 def new_book():
         form = BookForm()
+        authorChoices = ([(None, 'None')]+ [(each.id, each.name()) for each in Author.query.all()])
+        genreChoices = ([(None, 'None')]+ [(each.id, each.name()) for each in Genre.query.all()])
+        publisherChoices = ([(None, 'None')]+ [(each.id, each.name()) for each in Publisher.query.all()])
+        form.author.choices = authorChoices
+        form.genre.choices = genreChoices
+        form.publisher.choices = publisherChoices
         if form.validate_on_submit():
                 theAuthor = Author.query.get(form.author.data)
                 theGenre = Genre.query.get(form.genre.data)

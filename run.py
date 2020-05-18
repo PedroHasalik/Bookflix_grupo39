@@ -1,4 +1,4 @@
-from bookflix import create_app
+from Bookflix import create_app
 
 app = create_app()
 
