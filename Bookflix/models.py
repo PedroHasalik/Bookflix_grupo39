@@ -34,9 +34,9 @@ class Card(db.Model):
 class Book(db.Model):
     id=db.Column(db.Integer, primary_key = True)
     title= db.Column(db.String, nullable = False)
-    pdf_file= db.Column(db.String(20), nullable = False)
-    image_file= db.Column(db.String(20), nullable = False, default=)
-    isTrending= db.Column(db.Boolean, nullable= False, default= False)
+    #pdf_file= db.Column(db.String(20), nullable = False)
+    image_file= db.Column(db.String(20), nullable = False, default='default.jpg')
+    #isTrending= db.Column(db.Boolean, nullable= False, default= False)
 
     author=db.relationship('Author',lazy = True)
     genre=db.relationship('Genre',lazy = True)

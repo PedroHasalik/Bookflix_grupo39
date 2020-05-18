@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField
+from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired
+from bookflix.models import Author, Genre, Publisher
 
 
 class GenreForm(FlaskForm):
@@ -18,4 +19,7 @@ class PublisherForm(FlaskForm):
 
 class BookForm(FlaskForm):
     title = StringField('Titulo', validators= [ DataRequired()])
+    author= SelectField('Autor', choices=([(None, 'None')]+ [(each.id, each.name()) for each in Author.query.all()]), default='') #Las opciones son 'none' y todos los autores
+    genre= SelectField('Genero', choices=([(None, 'None')]+ [(each.id, each.name()) for each in Genre.query.all()]), default='')
+    publisher= SelectField('Editorial', choices=([(None, 'None')]+ [(each.id, each.name()) for each in Publisher.query.all()]), default='')
     submit = SubmitField('Crear')

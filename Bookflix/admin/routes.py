@@ -96,7 +96,10 @@ def new_publisher():
 def new_book():
         form = BookForm()
         if form.validate_on_submit():
-                book = Book(name=form.name.data)
+                theAuthor = Author.query.get(form.author.data)
+                theGenre = Genre.query.get(form.genre.data)
+                thePublisher = Publisher.query.get(form.publisher.data)
+                book = Book(name=form.name.data, author = theAuthor, genre = theGenre, publisher = thePublisher)
                 db.session.add(book)
                 db.session.commit()
                 flash('Book added successfully', 'success')
@@ -107,7 +110,7 @@ def new_book():
 #EDITAR las cosas de la base de datos.
 
 
-
+#Everything below this is commented out
 '''
 @admin.route("/admin/genres")
 @admin_required()
