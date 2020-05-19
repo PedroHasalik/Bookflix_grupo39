@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint, session
+from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
 from Bookflix.users.forms import (RegistrationForm, LoginForm)
 from Bookflix.models import User, Card
@@ -24,16 +24,15 @@ def register():
 
 @users.route("/login", methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
     form = LoginForm()
-    flash("primero"+str(current_user.is_authenticated), 'danger')
+    #if current_user.is_authenticated:
+    #    return redirect(url_for('main.home'))
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data, force=True)
-            flash("segundo"+str(current_user.is_authenticated), 'danger')
+            login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
+            #return redirect(next_page) if next_page else redirect(url_for('main.home'))
             return redirect(url_for('users.debug'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')

@@ -5,21 +5,28 @@ from datetime import datetime
 
 @login_manager.user_loader
 def load_user(user_id):
-        return Profile.query.get(int(user_id))
+        return User.query.get(int(user_id))
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
+
     email=db.Column(db.String(50),unique=True, nullable = False)
     password=db.Column(db.String(60), nullable = False)
     accountType=db.Column(db.String, nullable = False) #valores posibles: 'Admin', 'Premium', 'Normal'
     name=db.Column(db.String(60), nullable = False)
+    current_profile_id=db.Column(db.Integer, nullable = True, default = None) #Es un id de Profile
+
     card=db.relationship('Card', backref='owner', lazy = True)
     profiles=db.relationship('Profile', backref='owner', lazy = True )
+
+    def current_profile():
+        return Profile.query.get(current_profile_id)
 
 
 class Profile(db.Model):
     id=db.Column(db.Integer, primary_key = True)
     owner_id= db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    
     name=db.Column(db.String(50),unique=True, nullable = False)
     image_file = db.Column(db.String(20), nullable = False, default='default.jpg')
 
