@@ -7,6 +7,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='auth.css') }}">
 </head>
 <body>
+
 <div class="container">
 	<div class="d-flex justify-content-center h-100">
 		<div class="card1">
@@ -14,19 +15,46 @@
 				<h3>Iniciar Sesion</h3>
 			</div>
 			<div class="card-body">
+				{% with messages = get_flashed_messages(with_categories=true) %}
+					{% if messages %}
+					{% for category, message in messages %}
+						<div class="alert alert-{{ category }}">
+						{{ message }}
+						</div>
+					{% endfor %}
+					{% endif %}
+				{% endwith %}
 				<form method="POST" action="">
 					{{ form.hidden_tag() }}
 					<div class="input-group form-group">
+						{% if form.email.errors %}
+								{{ form.email(class="form-control form-control-lg is-invalid") }}
+								<div class="invalid-feedback">
+									{% for error in form.email.errors %}
+										<span>{{ error }}</span>
+									{% endfor %}
+								</div>
+						{% else %}
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-user"></i></span>
 						</div>
 						{{ form.email(class="form-control", placeholder="Email") }}
+						{% endif %}
 					</div>
 					<div class="input-group form-group">
+						{% if form.password.errors %}
+								{{ form.password(class="form-control form-control-lg is-invalid") }}
+								<div class="invalid-feedback">
+									{% for error in form.password.errors %}
+										<span>{{ error }}</span>
+									{% endfor %}
+								</div>
+						{% else %}
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-key"></i></span>
 						</div>
 						{{ form.password(class="form-control",  placeholder="Contraseña") }}
+						{% endif %}
 					</div>
 					<div class="form-group">
 						{{ form.submit(class="btn float-right login_btn") }}

@@ -7,22 +7,19 @@ from datetime import datetime
 def load_user(user_id):
         return Profile.query.get(int(user_id))
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
-
     email=db.Column(db.String(50),unique=True, nullable = False)
     password=db.Column(db.String(60), nullable = False)
     accountType=db.Column(db.String, nullable = False) #valores posibles: 'Admin', 'Premium', 'Normal'
     name=db.Column(db.String(60), nullable = False)
-
     card=db.relationship('Card', backref='owner', lazy = True)
     profiles=db.relationship('Profile', backref='owner', lazy = True )
 
 
-class Profile(db.Model,UserMixin):
+class Profile(db.Model):
     id=db.Column(db.Integer, primary_key = True)
     owner_id= db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-
     name=db.Column(db.String(50),unique=True, nullable = False)
     image_file = db.Column(db.String(20), nullable = False, default='default.jpg')
 
@@ -34,7 +31,6 @@ class Profile(db.Model,UserMixin):
 class Card(db.Model):
     id=db.Column(db.Integer, primary_key = True)
     owner_id= db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-
     number = db.Column(db.Integer, nullable = False)
     security_number = db.Column(db.Integer, nullable = False)
     expiration_date = db.Column(db.DateTime, nullable = False)

@@ -14,58 +14,132 @@
 				<h3>Crear usuario</h3>
 			</div>
 			<div class="card-body">
-				<form method="POST" action="">
-					{{ form.hidden_tag() }}
-					<div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-user"></i></span>
+				{% with messages = get_flashed_messages(with_categories=true) %}
+					{% if messages %}
+					{% for category, message in messages %}
+						<div class="alert alert-{{ category }}">
+						{{ message }}
 						</div>
-						{{ form.name(class="form-control", placeholder="Nombre") }}
-                    </div>
-                    <div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
+					{% endfor %}
+					{% endif %}
+				{% endwith %}
+				<div class="card-body">
+					<form method="POST" action="">
+						{{ form.hidden_tag() }}
+						<div class="input-group form-group">
+							{% if form.name.errors %}
+								{{ form.name(class="form-control form-control-lg is-invalid") }}
+								<div class="invalid-feedback">
+									{% for error in form.name.errors %}
+										<span>{{ error }}</span>
+									{% endfor %}
+								</div>
+							{% else %}
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fas fa-user"></i></span>
+							</div>
+							{{ form.name(class="form-control", placeholder="Nombre") }}
+							{% endif %}
 						</div>
-						{{ form.email(class="form-control", placeholder="Email") }}
-                    </div>
-                    <div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-credit-card"></i></span>
+						<div class="input-group form-group">
+							{% if form.email.errors %}
+								{{ form.email(class="form-control form-control-lg is-invalid") }}
+								<div class="invalid-feedback">
+									{% for error in form.email.errors %}
+										<span>{{ error }}</span>
+									{% endfor %}
+								</div>
+							{% else %}
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
+							</div>
+							{{ form.email(class="form-control", placeholder="Email") }}
+							{% endif %}
 						</div>
-						{{ form.number(class="form-control", placeholder="Numero de tarjeta") }}
-                    </div>
-                    <div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-credit-card"></i></span>
+						<div class="input-group form-group">
+							{% if form.number.errors %}
+								{{ form.number(class="form-control form-control-lg is-invalid") }}
+								<div class="invalid-feedback">
+									{% for error in form.number.errors %}
+										<span>{{ error }}</span>
+									{% endfor %}
+								</div>
+							{% else %}
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fas fa-credit-card"></i></span>
+							</div>
+							{{ form.number(class="form-control", placeholder="Numero de tarjeta") }}
+							{% endif %}
 						</div>
-						{{ form.securityNum(class="form-control", placeholder="Numero de seguridad") }}
-                    </div>
-                    <div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="far fa-calendar-alt"></i></i></span>
+						<div class="input-group form-group">
+							{% if form.securityNum.errors %}
+								{{ form.securityNum(class="form-control form-control-lg is-invalid") }}
+								<div class="invalid-feedback">
+									{% for error in form.securityNum.errors %}
+										<span>{{ error }}</span>
+									{% endfor %}
+								</div>
+							{% else %}
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fas fa-credit-card"></i></span>
+							</div>
+							{{ form.securityNum(class="form-control", placeholder="Numero de seguridad") }}
+							{% endif %}
 						</div>
-						{{ form.expDate(class="form-control") }}
-					</div>
-					<div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-key"></i></span>
+						<div class="input-group form-group">
+							{% if form.expDate.errors %}
+								{{ form.expDate(class="form-control form-control-lg is-invalid") }}
+								<div class="invalid-feedback">
+									{% for error in form.expDate.errors %}
+										<span>{{ error }}</span>
+									{% endfor %}
+								</div>
+							{% else %}
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="far fa-calendar-alt"></i></i></span>
+							</div>
+							{{ form.expDate(class="form-control") }}
+							{% endif %}
 						</div>
-						{{ form.password(class="form-control",  placeholder="Contraseña") }}
-					</div>
-					<h5 class="rb">Plan premiun: $100 X mes</h5>
-					<h5 class="rb">Plan normal: $50 X mes</h5>
-                    <div class="form-group">
-                        {% for subfield in form.userType %}
-							<tr>
-								<td>{{ subfield }}</td>
-								<td>{{ subfield.label (class='rb') }}</td>
-							</tr>
+						<div class="input-group form-group">
+							{% if form.password.errors %}
+								{{ form.password(class="form-control form-control-lg is-invalid") }}
+								<div class="invalid-feedback">
+									{% for error in form.password.errors %}
+										<span>{{ error }}</span>
+									{% endfor %}
+								</div>
+							{% else %}
+							<div class="input-group-prepend">
+								<span class="input-group-text"><i class="fas fa-key"></i></span>
+							</div>
+							{{ form.password(class="form-control",  placeholder="Contraseña") }}
+							{% endif %}
+						</div>
+						<h5 class="rb">Plan premiun: $100 X mes</h5>
+						<h5 class="rb">Plan normal: $50 X mes</h5>
+						<div class="form-group">
+							{% if form.userType.errors %}
+								{{ form.userType(class="form-control form-control-lg is-invalid") }}
+								<div class="invalid-feedback">
+									{% for error in form.userType.errors %}
+										<span>{{ error }}</span>
+									{% endfor %}
+								</div>
+							{% else %}
+							{% for subfield in form.userType %}
+								<tr>
+									<td>{{ subfield }}</td>
+									<td>{{ subfield.label (class='rb') }}</td>
+								</tr>
 							{% endfor %}
-                    </div>
-					<div class="form-group">
-						{{ form.submit(class="btn float-right login_btn") }}
-					</div>
-				</form>
+							{% endif %}
+						</div>
+						<div class="form-group">
+							{{ form.submit(class="btn float-right login_btn") }}
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
