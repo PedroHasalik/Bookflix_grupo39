@@ -100,10 +100,10 @@ def update_profile():
         form.name.data = current_user.current_profile.name
     return render_template('update_profile.html', title='Account', form=form, profile =  current_user.current_profile )
 
-@users.route("/selecting")
+@users.route("/set_profile/<int:id>")
 @full_login_required()
 def set_profile(id):
-    profile=Profile.query.get(id)
+    profile=Profile.query.get_or_404(id)
     if(profile.owner == current_user):
         current_user.current_profile_id = id 
     return redirect (url_for("main.home"))

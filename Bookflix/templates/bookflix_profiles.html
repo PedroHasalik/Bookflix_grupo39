@@ -1,36 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='profiles.css') }}">
+	<title>{{ title }}</title>
+</head>
+
 <div class="logo"></div>
 
-<div class="wrapper">
-	<h1>Quién está leyendo?</h1>
-	<div class="profile-wrap">
-		{% for profile in profiles.items %}
+<body>
+	<div class="wrapper">
+		<h1 class="blurb">Quién está leyendo?</h1>
+		{% for profile in profiles %}
 			<div class="profile">
-				<div class="profile-icon profile4"> <!-- Acá iría la imagen del perfil. Se podría acceder desde el css. -->
-			
-				</div>
+				<a class="profile-icon profile4" href="{{url_for('users.set_profile', id=profile.id)}}">
+					{{ url_for('static', filename= 'profile_pics/' + profile.image_file) }}
+				</a>
 				<div class="profile-name"> 
 					{{ profile.name }}
 				</div>
 			</div>
 		{% endfor %}
-		{% if user.accountType == 'Normal'%}
-			{% if profiles.items.lenght < 2 %} <!-- No sé si está bien todavía -->
-				<div class='btn'>
-					<!-- Botón de crear perfil -->
+		{% if current_user.accountType == 'Normal'%}
+			{% if profiles|length < 2 %} 
+				<div class='btn' href="#">
+					<a href="{{url_for('users.register_profile')}}">Crear Perfil</a>
 				</div>
 			{% endif %}
-		{% elif user.accountType == 'Premium'%}
-			{% if profiles.items.lenght < 4 %}
-			<div class='btn'>
-				<!-- Botón de crear perfil -->
+		{% elif current_user.accountType == 'Premium'%}
+			{% if profiles|length < 4 %}
+			<div>
+				<a href="{{url_for('users.register_profile')}}">Crear Perfil</a>
+			</div>
+			{% endif %}
+		{% elif current_user.accountType == 'Admin'%}
+			{% if profiles|length < 1 %}
+			<div>
+				<a href="{{url_for('users.register_profile')}}">Crear Perfil</a>
 			</div>
 			{% endif %}
 		{% endif %}
 	</div>
-
-</div>
-{% if profiles.items != None %}
-	</div>
-		<!-- <a href="{{ url_for('')}}" target="_blank">Gestionar perfiles</a> -->
-	</div>
-{% endif %}
+	{% if profiles|length > 0 %}
+		</div>
+			<a href="#" target="_blank" class="gestion">Gestionar perfiles</a>
+		</div>
+	{% endif %}
+</body>
