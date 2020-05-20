@@ -24,6 +24,7 @@ def register():
         return redirect(url_for('users.login'))
     return render_template('register.html', title='Register', form=form)
 
+@users.route('/', methods=['GET', 'POST'])
 @users.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -35,7 +36,7 @@ def login():
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             #return redirect(next_page) if next_page else redirect(url_for('main.home'))
-            return redirect(url_for('users.account'))
+            return redirect(url_for('main.profiles'))
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
@@ -43,7 +44,7 @@ def login():
 @users.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('main.home'))
+    return redirect(url_for('users.login'))
 
 
 @users.route("/account", methods=['GET', 'POST'])
@@ -80,6 +81,8 @@ def register_profile():
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
+        else:
+            picture_file = "default.png"
         profile =Profile (owner=current_user, name=form.name.data, image_file=picture_file)
         db.session.add(profile)
         db.session.commit()

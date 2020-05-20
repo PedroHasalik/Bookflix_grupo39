@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
+    <title>{{ title }}</title>
     <meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='profiles.css') }}">
-	<title>{{ title }}</title>
 </head>
 
-<div class="logo"></div>
+<div class="logo"></div> <a  href="{{url_for('users.account')}}">Editar Perfil</a>
 
 <body>
 	<div class="wrapper">
@@ -17,7 +15,7 @@
 		{% for profile in profiles %}
 			<div class="profile">
 				<a class="profile-icon profile4" href="{{url_for('users.set_profile', id=profile.id)}}">
-					{{ url_for('static', filename= 'profile_pics/' + profile.image_file) }}
+					<img src= "{{ url_for('static', filename= 'profile_pics/' + profile.image_file) }}"> </img>
 				</a>
 				<div class="profile-name"> 
 					{{ profile.name }}
@@ -46,7 +44,8 @@
 	</div>
 	{% if profiles|length > 0 %}
 		</div>
-			<a href="#" target="_blank" class="gestion">Gestionar perfiles</a>
+			<a href="#" target="_blank" class="gestion">Gestionar perfiles</a> <a  href="{{url_for('users.logout')}}">cerrar sesion</a>
+
 		</div>
 	{% endif %}
 </body>

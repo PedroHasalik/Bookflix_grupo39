@@ -5,7 +5,7 @@ from Bookflix.models import News, User, Profile
 
 main = Blueprint('main', __name__)
 
-@main.route('/')
+
 @main.route('/home')
 @login_required
 def home():

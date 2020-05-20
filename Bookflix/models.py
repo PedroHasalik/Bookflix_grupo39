@@ -25,7 +25,7 @@ class Profile(db.Model):
     id=db.Column(db.Integer, primary_key = True)
     owner_id= db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     name=db.Column(db.String(50),unique=True, nullable = False)
-    image_file = db.Column(db.String(20), nullable = False, default='default.jpg')
+    image_file = db.Column(db.String(20), nullable = False, default='default.png')
 
     #favourites=db.relationship('Book',lazy = True) VA A SER UN QUILOMBO IMPLEMENTAR ESTO. NOTA: probablemente se solucione implementandolo como many-to-many
     #pending=db.relationship('Book',lazy = True)
