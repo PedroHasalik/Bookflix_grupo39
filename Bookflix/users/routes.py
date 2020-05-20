@@ -1,8 +1,10 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint
 from flask_login import login_user, current_user, logout_user, login_required
-from Bookflix.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm)
-from Bookflix.models import User, Card
+from Bookflix.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm, ProfileRegistrationForm, ProfileUpdateForm)
+from Bookflix.models import User, Card, Profile
 from Bookflix import bcrypt, db
+from Bookflix.users.utils import save_picture
+from Bookflix.decorators import full_login_required
 
 users = Blueprint('users', __name__)
 
@@ -70,6 +72,42 @@ def account():
         form.securityNum.data = card.security_number
         form.expDate.data = card.expiration_date
     return render_template('update_user.html', title='Account', form=form)
+
+@users.route("/register_profile", methods=['GET', 'POST'])
+@login_required
+def register_profile():
+    form = ProfileRegistrationForm()
+    if form.validate_on_submit():
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+        profile =Profile (owner=current_user, name=form.name.data, image_file=picture_file)
+        db.session.add(profile)
+        db.session.commit()
+    return render_template('register_profile.html', title='Account', form=form)
+
+@users.route("/update_profile", methods=['GET', 'POST'])
+@full_login_required()
+def update_profile():
+    form = ProfileUpdateForm
+    if form.validate_on_submit():
+        current_user.current_profile.name = form.name.data
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+        current_user.current_profile.image_file = picture_file
+        db.session.commit()
+        flash('Los datos de la cuenta se guardaron!', 'success')
+    elif request.method == 'GET':
+        form.name.data = current_user.current_profile.name
+    return render_template('update_profile.html', title='Account', form=form, profile =  current_user.current_profile )
+
+@users.route("/selecting")
+@full_login_required()
+def set_profile(id):
+    profile=Profile.query.get(id)
+    if(profile.owner == current_user):
+        current_user.current_profile_id = id 
+    return redirect (url_for("main.home"))
+
 
 @users.route("/debug")
 def debug():

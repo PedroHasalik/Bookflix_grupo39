@@ -24,7 +24,6 @@ class User(db.Model, UserMixin):
 class Profile(db.Model):
     id=db.Column(db.Integer, primary_key = True)
     owner_id= db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    
     name=db.Column(db.String(50),unique=True, nullable = False)
     image_file = db.Column(db.String(20), nullable = False, default='default.jpg')
 
