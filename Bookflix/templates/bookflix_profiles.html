@@ -2,35 +2,33 @@
 
 <div class="wrapper">
 	<h1>Quién está leyendo?</h1>
-	<div class="profile-wrap">
-		{% for profile in profiles.items %}
-			<div class="profile">
-				<div class="profile-icon profile4"> <!-- Acá iría la imagen del perfil. Se podría acceder desde el css. -->
-			
-				</div>
-				<div class="profile-name"> 
-					{{ profile.name }}
-				</div>
+	{% for profile in profiles %}
+		<div class="profile">
+			<div class="profile-icon profile4"> <!-- Acá iría la imagen del perfil. Se podría acceder desde el css. -->
+		
 			</div>
-		{% endfor %}
-		{% if user.accountType == 'Normal'%}
-			{% if profiles.items.lenght < 2 %} <!-- No sé si está bien todavía -->
-				<div class='btn'>
-					<!-- Botón de crear perfil -->
-				</div>
-			{% endif %}
-		{% elif user.accountType == 'Premium'%}
-			{% if profiles.items.lenght < 4 %}
-			<div class='btn'>
-				<!-- Botón de crear perfil -->
+			<div class="profile-name"> 
+				{{ profile.name }}
 			</div>
-			{% endif %}
+		</div>
+	{% endfor %}
+	{% if current_user.accountType == 'Normal'%}
+		{% if cantProf < 2 %} 
+			<div class='btn' href="#">
+				<a href="#">Crear Perfil</a>
+			</div>
 		{% endif %}
-	</div>
+	{% elif current_user.accountType == 'Premium'%}
+		{% if cantProf < 4 %}
+		<div>
+			<a href="#">Crear Perfil</a>
+		</div>
+		{% endif %}
+	{% endif %}
 
 </div>
-{% if profiles.items != None %}
+{% if cantProf > 0 %}
 	</div>
-		<!-- <a href="{{ url_for('')}}" target="_blank">Gestionar perfiles</a> -->
+		<a href="#" target="_blank">Gestionar perfiles</a>
 	</div>
 {% endif %}
