@@ -12,8 +12,3 @@ def home():
     news = News.query.order_by(News.date_posted.desc())
     return render_template('home.html', news=news)
 
-@main.route('/profiles')
-@login_required
-def profiles():
-    profiles = current_user.profiles
-    return render_template('bookflix_profiles.html', profiles=profiles, user=current_user)

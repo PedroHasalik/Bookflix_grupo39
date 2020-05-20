@@ -114,7 +114,7 @@ def new_book():
         
 
 #EDITAR las cosas de la base de datos.
-@admin.route("/admin/genre/edit/<integer:id>", methods=['GET', 'POST'])
+@admin.route("/admin/genre/edit/<int:id>", methods=['GET', 'POST'])
 @admin_required()
 def edit_genre(id):
         genre = Genre.query.get_or_404(id)
@@ -128,7 +128,7 @@ def edit_genre(id):
                 form.name.data = genre.name
         return render_template('admin/new_genre.html', form=form, legend='Editar Genero', title=genre.name)
 
-@admin.route("/admin/author/edit/<integer:id>", methods=['GET', 'POST'])
+@admin.route("/admin/author/edit/<int:id>", methods=['GET', 'POST'])
 @admin_required()
 def edit_author(id):
         author = Author.query.get_or_404(id)
@@ -144,7 +144,7 @@ def edit_author(id):
                 form.surname.data = author.surname
         return render_template('admin/new_author.html', form=form, legend='Editar Autor', title=author.name)
 
-@admin.route("/admin/publisher/edit/<integer:id>", methods=['GET', 'POST'])
+@admin.route("/admin/publisher/edit/<int:id>", methods=['GET', 'POST'])
 @admin_required()
 def edit_publisher(id):
         publisher = Publisher.query.get_or_404(id)
@@ -158,7 +158,7 @@ def edit_publisher(id):
                 form.name.data = publisher.name
         return render_template('admin/new_publisher.html', form=form, legend='Editar Editorial', title=publisher.name)
 
-@admin.route("/admin/book/edit/<integer:id>", methods=['GET', 'POST'])
+@admin.route("/admin/book/edit/<int:id>", methods=['GET', 'POST'])
 @admin_required()
 def edit_book(id):
         book = Book.query.get_or_404(id)
