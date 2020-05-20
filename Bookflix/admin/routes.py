@@ -55,7 +55,7 @@ def news_list():
         return render_template('admin/admin_list.html', title='Lista de Noticias', listOf = 'news', items=items)
 
 #CREAR las cosas de la base de datos.
-@admin.route("/admin/new_genre")
+@admin.route("/admin/new_genre", methods=['GET', 'POST'])
 @admin_required()
 def new_genre():
         form = GenreForm()
@@ -65,9 +65,9 @@ def new_genre():
                 db.session.commit()
                 flash('Genre added successfully', 'success')
                 return redirect(url_for('admin.genre_list'))
-        return render_template('admin/genre_new.html', form=form, legend='Nuevo Genero', title='Nuevo Genero')
+        return render_template('admin/new_genre.html', form=form, legend='Nuevo Genero', title='Nuevo Genero')
 
-@admin.route("/admin/new_author")
+@admin.route("/admin/new_author", methods=['GET', 'POST'])
 @admin_required()
 def new_author():
         form = AuthorForm()
@@ -77,9 +77,9 @@ def new_author():
                 db.session.commit()
                 flash('Author added successfully', 'success')
                 return redirect(url_for('admin.author_list'))
-        return render_template('admin/author_new.html', form=form, legend='Nuevo Autor', title='Nuevo Autor')
+        return render_template('admin/new_author.html', form=form, legend='Nuevo Autor', title='Nuevo Autor')
 
-@admin.route("/admin/new_publisher")
+@admin.route("/admin/new_publisher", methods=['GET', 'POST'])
 @admin_required()
 def new_publisher():
         form = PublisherForm()
@@ -89,9 +89,9 @@ def new_publisher():
                 db.session.commit()
                 flash('Publisher added successfully', 'success')
                 return redirect(url_for('admin.publisher_list'))
-        return render_template('admin/publisher_new.html', form=form, legend='Nueva Editorial', title='Nueva Editorial')
+        return render_template('admin/new_publisher.html', form=form, legend='Nueva Editorial', title='Nueva Editorial')
 
-@admin.route("/admin/new_book")
+@admin.route("/admin/new_book", methods=['GET', 'POST'])
 @admin_required()
 def new_book():
         form = BookForm()
@@ -105,15 +105,78 @@ def new_book():
                 theAuthor = Author.query.get(form.author.data)
                 theGenre = Genre.query.get(form.genre.data)
                 thePublisher = Publisher.query.get(form.publisher.data)
-                book = Book(name=form.name.data, author = theAuthor, genre = theGenre, publisher = thePublisher)
+                book = Book(name=form.name.data, theAuthor = theAuthor, theGenre = theGenre, thePublisher = thePublisher)
                 db.session.add(book)
                 db.session.commit()
                 flash('Book added successfully', 'success')
                 return redirect(url_for('admin.book_list'))
-        return render_template('admin/book_new.html', form=form, legend='Nuevo Libro', title='Nuevo Libro')
+        return render_template('admin/new_book.html', form=form, legend='Nuevo Libro', title='Nuevo Libro')
         
 
 #EDITAR las cosas de la base de datos.
+@admin.route("/admin/genre/edit/<integer:id>", methods=['GET', 'POST'])
+@admin_required()
+def edit_genre(id):
+        genre = Genre.query.get_or_404(id)
+        form = GenreForm()
+        if form.validate_on_submit():
+                genre.name = form.name.data
+                db.session.commit()
+                flash('Genre successfully updated!', 'success')
+                return redirect(url_for('admin.genre_list'))
+        elif request.method == 'GET':
+                form.name.data = genre.name
+        return render_template('admin/new_genre.html', form=form, legend='Editar Genero', title=genre.name)
+
+@admin.route("/admin/author/edit/<integer:id>", methods=['GET', 'POST'])
+@admin_required()
+def edit_author(id):
+        author = Author.query.get_or_404(id)
+        form = AuthorForm()
+        if form.validate_on_submit():
+                author.name = form.name.data
+                author.surname = form.surname.data
+                db.session.commit()
+                flash('author successfully updated!', 'success')
+                return redirect(url_for('admin.author_list'))
+        elif request.method == 'GET':
+                form.name.data = author.name
+                form.surname.data = author.surname
+        return render_template('admin/new_author.html', form=form, legend='Editar Autor', title=author.name)
+
+@admin.route("/admin/publisher/edit/<integer:id>", methods=['GET', 'POST'])
+@admin_required()
+def edit_publisher(id):
+        publisher = Publisher.query.get_or_404(id)
+        form = PublisherForm()
+        if form.validate_on_submit():
+                publisher.name = form.name.data
+                db.session.commit()
+                flash('publisher successfully updated!', 'success')
+                return redirect(url_for('admin.publisher_list'))
+        elif request.method == 'GET':
+                form.name.data = publisher.name
+        return render_template('admin/new_publisher.html', form=form, legend='Editar Editorial', title=publisher.name)
+
+@admin.route("/admin/book/edit/<integer:id>", methods=['GET', 'POST'])
+@admin_required()
+def edit_book(id):
+        book = Book.query.get_or_404(id)
+        form = BookForm()
+        if form.validate_on_submit():
+                book.title = form.title.data
+                book.theAuthor = Author.query.get(form.author.data)
+                book.theGenre = Genre.query.get(form.genre.data)
+                book.thePublisher = Publisher.query.get(form.publisher.data)
+                db.session.commit()
+                flash('book successfully updated!', 'success')
+                return redirect(url_for('admin.book_list'))
+        elif request.method == 'GET':
+                form.title.data = book.title
+                form.author.data = book.theAuthor.id
+                form.genre.data = book.theGenre.id
+                form.publisher.data = book.thePublisher.id
+        return render_template('admin/new_book.html', form=form, legend='Editar Genero', title=book.title)
 
 
 #Everything below this is commented out
