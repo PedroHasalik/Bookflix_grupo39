@@ -2,29 +2,32 @@
 
 <div class="wrapper">
 	<h1>Quién está leyendo?</h1>
-	{% for profile in profiles.items %}
-		<div class="profile">
-			<div class="profile-icon profile4"> <!-- Acá iría la imagen del perfil. Se podría acceder desde el css. -->
+	<div class="profile-wrap">
 		
+		{% for profile in profiles.items %}
+			<div class="profile">
+				<div class="profile-icon profile4"> <!-- Acá iría la imagen del perfil. Se podría acceder desde el css. -->
+			
+				</div>
+				<div class="profile-name"> 
+					{{ profile.name }}
+				</div>
 			</div>
-			<div class="profile-name"> 
-				{{ profile.name }}
-			</div>
-		</div>
-	{% endfor %}
-	{% if profiles.owner.accountType = 'Normal'%}
-		{% if profiles.items.lenght &lt 2 %} <!-- No sé si está bien todavía -->
+		{% endfor %}
+		{% if profiles.owner.accountType == 'Normal'%}
+			{% if profiles.items.lenght < 2 %} <!-- No sé si está bien todavía -->
+				<div class='btn'>
+					<!-- Botón de crear perfil -->
+				</div>
+			{% endif %}
+		{% elif profiles.owner.accountType == 'Premium'%}
+			{% if profiles.items.lenght < 4 %}
 			<div class='btn'>
 				<!-- Botón de crear perfil -->
 			</div>
+			{% endif %}
 		{% endif %}
-	{% elif profiles.owner.accountType = 'Premium'%}
-		{% if profiles.items.lenght &lt 4 %}
-		<div class='btn'>
-			<!-- Botón de crear perfil -->
-		</div>
-		{% endif %}
-	{% endif %}
+	</div>
 
 </div>
 {% if profiles.items != None %}
