@@ -20,7 +20,7 @@ class RegistrationForm(FlaskForm):
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user:
-            raise ValidationError('That email is taken. Please choose a different one.')
+            raise ValidationError('La direccion de mail esta en uso. Por favor seleccione otra.')
 
 class LoginForm(FlaskForm):
     email = StringField('email',validators=[DataRequired(), Length(min=2, max=20)])
@@ -30,11 +30,13 @@ class LoginForm(FlaskForm):
 
 
 class UpdateAccountForm(FlaskForm):
-    username = StringField('Username',
-                           validators=[DataRequired(), Length(min=2, max=20)])
-    email = StringField('Email',
-                        validators=[DataRequired(), Email()])
-    picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
+    name = StringField('Name',validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email',validators=[DataRequired(), Email()])
+    number = IntegerField('CardNumber', validators=[DataRequired()])
+    expDate = DateField('ExpDate' ,format='%Y-%m-%d' ,validators=[DataRequired()])
+    securityNum =  IntegerField( 'SecurityNumber' , validators=[DataRequired()])                                           
+    password = PasswordField('Password', validators=[DataRequired()])
+    userType =  RadioField('UserType', choices=[('Premium','Premium'),('Normal','Normal')])
     submit = SubmitField('Update')
 
     def validate_username(self, username):

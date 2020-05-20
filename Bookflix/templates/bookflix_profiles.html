@@ -3,7 +3,6 @@
 <div class="wrapper">
 	<h1>Quién está leyendo?</h1>
 	<div class="profile-wrap">
-		
 		{% for profile in profiles.items %}
 			<div class="profile">
 				<div class="profile-icon profile4"> <!-- Acá iría la imagen del perfil. Se podría acceder desde el css. -->
@@ -14,13 +13,13 @@
 				</div>
 			</div>
 		{% endfor %}
-		{% if profiles.owner.accountType == 'Normal'%}
+		{% if user.accountType == 'Normal'%}
 			{% if profiles.items.lenght < 2 %} <!-- No sé si está bien todavía -->
 				<div class='btn'>
 					<!-- Botón de crear perfil -->
 				</div>
 			{% endif %}
-		{% elif profiles.owner.accountType == 'Premium'%}
+		{% elif user.accountType == 'Premium'%}
 			{% if profiles.items.lenght < 4 %}
 			<div class='btn'>
 				<!-- Botón de crear perfil -->

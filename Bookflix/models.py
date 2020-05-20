@@ -9,13 +9,11 @@ def load_user(user_id):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
-
     email=db.Column(db.String(50),unique=True, nullable = False)
     password=db.Column(db.String(60), nullable = False)
     accountType=db.Column(db.String, nullable = False) #valores posibles: 'Admin', 'Premium', 'Normal'
     name=db.Column(db.String(60), nullable = False)
     current_profile_id=db.Column(db.Integer, nullable = True, default = None) #Es un id de Profile
-
     card=db.relationship('Card', backref='owner', lazy = True)
     profiles=db.relationship('Profile', backref='owner', lazy = True )
 
