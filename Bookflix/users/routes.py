@@ -86,6 +86,7 @@ def register_profile():
         profile =Profile (owner=current_user, name=form.name.data, image_file=picture_file)
         db.session.add(profile)
         db.session.commit()
+        return redirect(url_for('main.profiles'))
     return render_template('register_profile.html', title='Account', form=form)
 
 @users.route("/update_profile", methods=['GET', 'POST'])
@@ -109,8 +110,8 @@ def update_profile():
 @login_required
 def set_profile(id):
     profile=Profile.query.get_or_404(id)
-    #if(profile.owner == current_user):
-    current_user.current_profile_id = id
+    if(profile.owner == current_user):
+        current_user.current_profile_id = id
     db.session.commit()
     return redirect (url_for("main.home"))
 
