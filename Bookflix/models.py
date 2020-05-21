@@ -17,8 +17,8 @@ class User(db.Model, UserMixin):
     card=db.relationship('Card', backref='owner', lazy = True)
     profiles=db.relationship('Profile', backref='owner', lazy = True )
 
-    def current_profile():
-        return Profile.query.get(current_profile_id)
+    def current_profile(self):
+        return Profile.query.get(self.current_profile_id)
 
 
 class Profile(db.Model):
@@ -47,8 +47,8 @@ class Author(db.Model):
 
     books = db.relationship('Book', backref='theAuthor', lazy = True)
 
-    def name():
-        fullName = name+' '+surname
+    def name(self):
+        fullName = self.name+' '+self.surname
         return fullName
 
 class Genre(db.Model):
@@ -57,8 +57,8 @@ class Genre(db.Model):
 
     books = db.relationship('Book', backref='theGenre', lazy = True)
 
-    def name():
-        return name
+    def name(self):
+        return self.name
 
 class Publisher(db.Model):
     id=db.Column(db.Integer, primary_key = True)
@@ -66,8 +66,8 @@ class Publisher(db.Model):
 
     books = db.relationship('Book', backref='thePublisher', lazy = True)
 
-    def name():
-        return name
+    def name(self):
+        return self.name
 
 class Book(db.Model):
     id=db.Column(db.Integer, primary_key = True)
@@ -83,8 +83,8 @@ class Book(db.Model):
     #reviews=db.relationship('Review',lazy = True)
     chapters=db.relationship('Chapter', lazy = True, backref='book')
 
-    def name():
-        return title
+    def name(self):
+        return self.title
 
 class Chapter(db.Model):
     id=db.Column(db.Integer, primary_key = True)
@@ -111,8 +111,8 @@ class News(db.Model):
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     image_file =  image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
 
-    def name():
-        return title
+    def name(self):
+        return self.title
 
 
 

@@ -16,7 +16,7 @@ def full_login_required():
             if (not current_user.current_profile()):
                 # Redirect to the unauthorized page
                 flash('Please choose a profile before accessing the app.', 'info')
-                return redirect(url_for('users.profile_selection')) #lo que sea que llamen la funcion de la ruta para elegir perfil
+                return redirect(url_for('main.profiles')) #lo que sea que llamen la funcion de la ruta para elegir perfil
 
             # It's OK to call the view
             return view_function(*args, **kwargs)
@@ -36,7 +36,7 @@ def admin_required():
             if (not current_user.current_profile()):
                 # Redirect to the unauthorized page
                 flash('Please choose a profile before accessing the app.', 'info')
-                return redirect(url_for('users.profile_selection')) #lo que sea que llamen la funcion de la ruta para elegir perfil
+                return redirect(url_for('main.profiles')) #lo que sea que llamen la funcion de la ruta para elegir perfil
 
             # User must be of account type Admin
             if (not current_user.accountType == 'Admin'):
