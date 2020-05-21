@@ -255,7 +255,7 @@ def edit_news(id):
 
 #BORRAR las cosas de la base de datos
 
-@admin.route("/admin/genre/delete<int:id>")
+@admin.route("/admin/genre/delete/<int:id>")
 @admin_required()
 def delete_genre(id):
         genre = Genre.query.get_or_404(id)
@@ -264,7 +264,7 @@ def delete_genre(id):
         flash('Genre successfully deleted!', 'success')
         return redirect(url_for('admin.genre_list'))
 
-@admin.route("/admin/author/delete<int:id>")
+@admin.route("/admin/author/delete/<int:id>")
 @admin_required()
 def delete_author(id):
         author = Author.query.get_or_404(id)
@@ -273,7 +273,7 @@ def delete_author(id):
         flash('Author successfully deleted!', 'success')
         return redirect(url_for('admin.author_list'))
 
-@admin.route("/admin/publisher/delete<int:id>")
+@admin.route("/admin/publisher/delete/<int:id>")
 @admin_required()
 def delete_publisher(id):
         publisher = Publisher.query.get_or_404(id)
@@ -282,7 +282,7 @@ def delete_publisher(id):
         flash('Publisher successfully deleted!', 'success')
         return redirect(url_for('admin.publisher_list'))
 
-@admin.route("/admin/book/delete<int:id>")
+@admin.route("/admin/book/delete/<int:id>")
 @admin_required()
 def delete_book(id):
         book = Book.query.get_or_404(id)
@@ -291,7 +291,7 @@ def delete_book(id):
         flash('Book successfully deleted!', 'success')
         return redirect(url_for('admin.book_list'))
 
-@admin.route("/admin/news/delete<int:id>")
+@admin.route("/admin/news/delete/<int:id>")
 @admin_required()
 def delete_news(id):
         news = News.query.get_or_404(id)
