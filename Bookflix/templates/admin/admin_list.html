@@ -4,12 +4,8 @@
     <h1 class="mb-3">{{title}} ({{ items.total }})</h1>
     {% for item in items.items %}
         <article class="media content-section">
-            <!--<img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}"> </img>-->
             <div class="media-body">
-                <!--<div class="article-metadata">
-                <small class="text-muted">{{ post.date_posted.strftime('%d-%m-%Y') }}</small>
-                </div>-->
-                <a class="article-metadata" href="{{ url_for('admin.edit_'+listOf, id=item.id }}">{{ item.name() }}</a>
+                <a class="article-metadata" href="{{ url_for('admin.edit_'+listOf, id=item.id) }}">{{ item.full_name() }}</a>
             </div>
         </article>
     {% endfor %}

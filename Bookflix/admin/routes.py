@@ -1,4 +1,5 @@
-from flask import render_template, request, Blueprint
+from flask import render_template, request, Blueprint, flash, redirect, url_for
+from Bookflix import db
 from Bookflix.decorators import full_login_required, admin_required
 from Bookflix.models import Book, Author, Genre, Publisher, News
 from Bookflix.admin.forms import GenreForm, AuthorForm, PublisherForm, BookForm
@@ -23,35 +24,35 @@ def admin_dashboard():
 @admin_required()
 def genre_list():
         page = request.args.get('page', 1, type=int)
-        items = Genre.query.all().paginate(page=page, per_page=10)
+        items = Genre.query.paginate(page=page, per_page=10)
         return render_template('admin/admin_list.html', title='Lista de Generos', listOf = 'genre', items=items)
 
 @admin.route("/admin/authors")
 @admin_required()
 def author_list():
         page = request.args.get('page', 1, type=int)
-        items = Author.query.all().paginate(page=page, per_page=10)
+        items = Author.query.paginate(page=page, per_page=10)
         return render_template('admin/admin_list.html', title='Lista de Autores', listOf = 'author', items=items)
 
 @admin.route("/admin/publishers")
 @admin_required()
 def publisher_list():
         page = request.args.get('page', 1, type=int)
-        items = Publisher.query.all().paginate(page=page, per_page=10)
+        items = Publisher.query.paginate(page=page, per_page=10)
         return render_template('admin/admin_list.html', title='Lista de Editoriales', listOf = 'publisher', items=items)
 
 @admin.route("/admin/books")
 @admin_required()
 def book_list():
         page = request.args.get('page', 1, type=int)
-        boitemsoks = Book.query.all().paginate(page=page, per_page=10)
+        items = Book.query.paginate(page=page, per_page=10)
         return render_template('admin/admin_list.html', title='Lista de Libros', listOf = 'book', items=items)
 
 @admin.route("/admin/news")
 @admin_required()
 def news_list():
         page = request.args.get('page', 1, type=int)
-        items = news.query.all().paginate(page=page, per_page=10)
+        items = news.query.paginate(page=page, per_page=10)
         return render_template('admin/admin_list.html', title='Lista de Noticias', listOf = 'news', items=items)
 
 #CREAR las cosas de la base de datos.
@@ -95,17 +96,31 @@ def new_publisher():
 @admin_required()
 def new_book():
         form = BookForm()
-        authorChoices = ([(None, 'None')]+ [(each.id, each.name()) for each in Author.query.all()])
-        genreChoices = ([(None, 'None')]+ [(each.id, each.name()) for each in Genre.query.all()])
-        publisherChoices = ([(None, 'None')]+ [(each.id, each.name()) for each in Publisher.query.all()])
+        #i have to put it to 0 because I'm coercing the field to be integer and a None just gets fucked up. 
+        #Next sprint: go back to this being None, find away to bypass the coerce=int thing
+        authorChoices = ([(0, 'None')]+ [(each.id, each.full_name()) for each in Author.query.all()]) 
+        genreChoices = ([(0, 'None')]+ [(each.id, each.full_name()) for each in Genre.query.all()])
+        publisherChoices = ([(0, 'None')]+ [(each.id, each.full_name()) for each in Publisher.query.all()])
         form.author.choices = authorChoices
         form.genre.choices = genreChoices
         form.publisher.choices = publisherChoices
         if form.validate_on_submit():
-                theAuthor = Author.query.get(form.author.data)
-                theGenre = Genre.query.get(form.genre.data)
-                thePublisher = Publisher.query.get(form.publisher.data)
-                book = Book(name=form.name.data, theAuthor = theAuthor, theGenre = theGenre, thePublisher = thePublisher)
+                if (form.author.data == 0):
+                        theAuthor = None
+                else:
+                        theAuthor = Author.query.get(form.author.data)
+
+                if (form.genre.data == 0):
+                        theGenre = None
+                else:
+                        theGenre = Genre.query.get(form.genre.data)
+
+                if (form.publisher.data == 0):
+                        thePublisher = None
+                else:
+                        thePublisher = Publisher.query.get(form.publisher.data)
+
+                book = Book(title=form.title.data, theAuthor = theAuthor, theGenre = theGenre, thePublisher = thePublisher)
                 db.session.add(book)
                 db.session.commit()
                 flash('Book added successfully', 'success')
@@ -163,19 +178,51 @@ def edit_publisher(id):
 def edit_book(id):
         book = Book.query.get_or_404(id)
         form = BookForm()
+        authorChoices = ([(0, 'None')]+ [(each.id, each.full_name()) for each in Author.query.all()])
+        genreChoices = ([(0, 'None')]+ [(each.id, each.full_name()) for each in Genre.query.all()])
+        publisherChoices = ([(0, 'None')]+ [(each.id, each.full_name()) for each in Publisher.query.all()])
+        form.author.choices = authorChoices
+        form.genre.choices = genreChoices
+        form.publisher.choices = publisherChoices
         if form.validate_on_submit():
                 book.title = form.title.data
-                book.theAuthor = Author.query.get(form.author.data)
-                book.theGenre = Genre.query.get(form.genre.data)
-                book.thePublisher = Publisher.query.get(form.publisher.data)
+
+                if (form.author.data == 0):
+                        book.theAuthor = None
+                else:
+                        book.theAuthor = Author.query.get(form.author.data)
+
+                if (form.genre.data == 0):
+                        book.theGenre = None
+                else:
+                        book.theGenre = Genre.query.get(form.genre.data)
+
+                if (form.publisher.data == 0):
+                        book.thePublisher = None
+                else:
+                        book.thePublisher = Publisher.query.get(form.publisher.data)
+
                 db.session.commit()
                 flash('book successfully updated!', 'success')
                 return redirect(url_for('admin.book_list'))
         elif request.method == 'GET':
                 form.title.data = book.title
-                form.author.data = book.theAuthor.id
-                form.genre.data = book.theGenre.id
-                form.publisher.data = book.thePublisher.id
+                
+                if (book.theAuthor):
+                        form.author.data = book.theAuthor.id
+                else:
+                        form.author.data = 0
+                
+                if (book.theGenre):                       
+                        form.genre.data = book.theGenre.id
+                else:
+                        form.genre.data = 0
+
+                if (book.thePublisher):
+                        form.publisher.data = book.thePublisher.id
+                else:
+                        form.publisher.data = 0
+
         return render_template('admin/new_book.html', form=form, legend='Editar Genero', title=book.title)
 
 

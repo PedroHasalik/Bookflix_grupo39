@@ -47,7 +47,7 @@ class Author(db.Model):
 
     books = db.relationship('Book', backref='theAuthor', lazy = True)
 
-    def name(self):
+    def full_name(self):
         fullName = self.name+' '+self.surname
         return fullName
 
@@ -57,7 +57,7 @@ class Genre(db.Model):
 
     books = db.relationship('Book', backref='theGenre', lazy = True)
 
-    def name(self):
+    def full_name(self):
         return self.name
 
 class Publisher(db.Model):
@@ -66,7 +66,7 @@ class Publisher(db.Model):
 
     books = db.relationship('Book', backref='thePublisher', lazy = True)
 
-    def name(self):
+    def full_name(self):
         return self.name
 
 class Book(db.Model):
@@ -83,7 +83,7 @@ class Book(db.Model):
     #reviews=db.relationship('Review',lazy = True)
     chapters=db.relationship('Chapter', lazy = True, backref='book')
 
-    def name(self):
+    def full_name(self):
         return self.title
 
 class Chapter(db.Model):
@@ -111,7 +111,7 @@ class News(db.Model):
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     image_file =  image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
 
-    def name(self):
+    def full_name(self):
         return self.title
 
 
