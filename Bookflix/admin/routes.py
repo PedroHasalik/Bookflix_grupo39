@@ -253,6 +253,53 @@ def edit_news(id):
 
     return render_template('admin/new_news.html', title='Editar Novedad', form=form, legend='Editar Novedad')
 
+#BORRAR las cosas de la base de datos
+
+@admin.route("/admin/genre/delete<int:id>")
+@admin_required()
+def delete_genre(id):
+        genre = Genre.query.get_or_404(id)
+        db.session.delete(genre)
+        db.session.commit()
+        flash('Genre successfully deleted!', 'success')
+        return redirect(url_for('admin.genre_list'))
+
+@admin.route("/admin/author/delete<int:id>")
+@admin_required()
+def delete_author(id):
+        author = Author.query.get_or_404(id)
+        db.session.delete(author)
+        db.session.commit()
+        flash('Author successfully deleted!', 'success')
+        return redirect(url_for('admin.author_list'))
+
+@admin.route("/admin/publisher/delete<int:id>")
+@admin_required()
+def delete_publisher(id):
+        publisher = Publisher.query.get_or_404(id)
+        db.session.delete(publisher)
+        db.session.commit()
+        flash('Publisher successfully deleted!', 'success')
+        return redirect(url_for('admin.publisher_list'))
+
+@admin.route("/admin/book/delete<int:id>")
+@admin_required()
+def delete_book(id):
+        book = Book.query.get_or_404(id)
+        db.session.delete(book)
+        db.session.commit()
+        flash('Book successfully deleted!', 'success')
+        return redirect(url_for('admin.book_list'))
+
+@admin.route("/admin/news/delete<int:id>")
+@admin_required()
+def delete_news(id):
+        news = News.query.get_or_404(id)
+        db.session.delete(news)
+        db.session.commit()
+        flash('News successfully deleted!', 'success')
+        return redirect(url_for('admin.news_list'))
+
 #Everything below this is commented out
 '''
 @news.route("/new/<int:new_id>/delete",  methods=['POST'])

@@ -6,6 +6,7 @@
         <article class="media content-section">
             <div class="media-body">
                 <a class="article-metadata" href="{{ url_for('admin.edit_'+listOf, id=item.id) }}">{{ item.full_name() }}</a>
+                <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('admin.delete_'+listOf, id=item.id) }}">Delete</a>
             </div>
         </article>
     {% endfor %}
