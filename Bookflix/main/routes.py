@@ -7,13 +7,20 @@ main = Blueprint('main', __name__)
 
 
 @main.route('/home')
-@login_required
+@full_login_required()
 def home():
-    news = News.query.order_by(News.date_posted.desc())
-    return render_template('home.html', news=news)
+    page = request.args.get('page', 1, type=int)
+    news = News.query.paginate(page=page, per_page=10)
+    return render_template('home.html', title='Home', news=news)
 
 @main.route('/profiles')
 @login_required
 def profiles():
     profiles = Profile.query.filter_by(owner=current_user).all()
     return render_template('bookflix_profiles.html', profiles=profiles)
+
+@main.route("/news/<int:news_id>")
+@full_login_required()
+def news(news_id):
+    news = News.query.get_or_404(news_id)
+    return render_template ('news.html', title=news.title, news=news)

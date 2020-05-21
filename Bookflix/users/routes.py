@@ -63,7 +63,7 @@ def account():
         card.expiration_date = form.expDate.data 
         db.session.commit()
         flash('Los datos de la cuenta se guardaron!', 'success')
-        return redirect(url_for('users.account'))
+        return redirect(url_for('main.home'))
     elif request.method == 'GET':
         form.name.data = current_user.name
         form.email.data = current_user.email
@@ -92,7 +92,7 @@ def register_profile():
 @users.route("/update_profile", methods=['GET', 'POST'])
 @full_login_required()
 def update_profile():
-    form = ProfileUpdateForm
+    form = ProfileUpdateForm()
     if form.validate_on_submit():
         current_user.current_profile().name = form.name.data
         if form.picture.data:
@@ -102,6 +102,7 @@ def update_profile():
         current_user.current_profile().image_file = picture_file
         db.session.commit()
         flash('Los datos de la cuenta se guardaron!', 'success')
+        return redirect(url_for('main.home'))
     elif request.method == 'GET':
         form.name.data = current_user.current_profile().name
     return render_template('update_profile.html', title='Account', form=form, profile =  current_user.current_profile() )

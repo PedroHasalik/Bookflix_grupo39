@@ -2,7 +2,7 @@ from flask import render_template, request, Blueprint, flash, redirect, url_for
 from Bookflix import db
 from Bookflix.decorators import full_login_required, admin_required
 from Bookflix.models import Book, Author, Genre, Publisher, News
-from Bookflix.admin.forms import GenreForm, AuthorForm, PublisherForm, BookForm
+from Bookflix.admin.forms import GenreForm, AuthorForm, PublisherForm, BookForm, NewsForm
 
 admin = Blueprint('admin', __name__)
 
@@ -52,7 +52,7 @@ def book_list():
 @admin_required()
 def news_list():
         page = request.args.get('page', 1, type=int)
-        items = news.query.paginate(page=page, per_page=10)
+        items = News.query.paginate(page=page, per_page=10)
         return render_template('admin/admin_list.html', title='Lista de Noticias', listOf = 'news', items=items)
 
 #CREAR las cosas de la base de datos.
@@ -126,7 +126,18 @@ def new_book():
                 flash('Book added successfully', 'success')
                 return redirect(url_for('admin.book_list'))
         return render_template('admin/new_book.html', form=form, legend='Nuevo Libro', title='Nuevo Libro')
-        
+
+@admin.route('/admin/new_news', methods=['GET', 'POST'])
+@admin_required()
+def new_news():
+    form = NewsForm()
+    if form.validate_on_submit():
+        news = News(title=form.title.data, content=form.content.data)
+        db.session.add(news)
+        db.session.commit()
+        flash('La novedad ha sido creada.', 'success')
+        return redirect(url_for('admin.news_list'))
+    return render_template('admin/new_news.html', title= 'Nueva novedad', form=form, legend='Nueva novedad')
 
 #EDITAR las cosas de la base de datos.
 @admin.route("/admin/genre/edit/<int:id>", methods=['GET', 'POST'])
@@ -225,9 +236,36 @@ def edit_book(id):
 
         return render_template('admin/new_book.html', form=form, legend='Editar Genero', title=book.title)
 
+@admin.route("/admin/news/edit/<int:id>",  methods=['GET', 'POST'])
+@admin_required()
+def edit_news(id):
+    news = News.query.get_or_404(id)
+    form = NewsForm()
+    if form.validate_on_submit():
+        news.title = form.title.data
+        news.content = form.content.data
+        db.session.commit()
+        flash('Novedad modificada.', 'success')
+        return redirect(url_for('admin.news_list'))
+    elif request.method == 'GET':
+        form.title.data = news.title
+        form.content.data = news.content
+
+    return render_template('admin/new_news.html', title='Editar Novedad', form=form, legend='Editar Novedad')
 
 #Everything below this is commented out
 '''
+@news.route("/new/<int:new_id>/delete",  methods=['POST'])
+@admin_required()
+def delete_new(new_id):
+    new = News.query.get_or_404(new_id)
+    if new.author != current_user:
+        abort(403)
+    db.session.delete(new)
+    db.session.commit()
+    flash('Novedad eliminada', 'success')
+    return redirect (url_for('main.home'))
+
 @admin.route("/admin/genres")
 @admin_required()
 def genre_list():

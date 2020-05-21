@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField
+from wtforms import StringField, SubmitField, SelectField, TextAreaField
 from wtforms.validators import DataRequired
 
 
@@ -23,3 +23,9 @@ class BookForm(FlaskForm):
     publisher= SelectField('Editorial', default='', coerce=int)#Las opciones son 'none' y todas las editoriales , se crea en la ruta
     
     submit = SubmitField('Crear')
+
+class NewsForm(FlaskForm):
+    title = StringField('Título:', validators=[DataRequired()])
+    content = TextAreaField('Contenido:', validators=[DataRequired()])
+
+    submit = SubmitField('Subir novedad')
