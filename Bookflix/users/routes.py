@@ -96,6 +96,8 @@ def update_profile():
         current_user.current_profile.name = form.name.data
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
+        else:
+            picture_file = "default.png"
         current_user.current_profile.image_file = picture_file
         db.session.commit()
         flash('Los datos de la cuenta se guardaron!', 'success')
