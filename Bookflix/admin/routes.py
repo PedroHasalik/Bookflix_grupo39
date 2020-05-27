@@ -3,6 +3,8 @@ from Bookflix import db
 from Bookflix.decorators import full_login_required, admin_required
 from Bookflix.models import Book, Author, Genre, Publisher, News
 from Bookflix.admin.forms import GenreForm, AuthorForm, PublisherForm, BookForm, NewsForm, GenreUpdateForm, PublisherUpdateForm, BookUpdateForm
+from Bookflix.admin.utils import save_picture
+
 
 admin = Blueprint('admin', __name__)
 
@@ -132,7 +134,9 @@ def new_book():
 def new_news():
     form = NewsForm()
     if form.validate_on_submit():
-        news = News(title=form.title.data, content=form.content.data)
+        if form.picture.data:
+                picture_file = save_picture(form.picture.data)
+        news = News(title=form.title.data, content=form.content.data, image_file=picture_file)
         db.session.add(news)
         db.session.commit()
         flash('La novedad ha sido creada.', 'success')
@@ -248,8 +252,13 @@ def edit_news(id):
     news = News.query.get_or_404(id)
     form = NewsForm()
     if form.validate_on_submit():
+        if form.picture.data:
+                picture_file = save_picture(form.picture.data)
+                news.image_file = picture_file
+
         news.title = form.title.data
         news.content = form.content.data
+        
         db.session.commit()
         flash('Novedad modificada.', 'success')
         return redirect(url_for('admin.news_list'))

@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, SubmitField, SelectField, TextAreaField, IntegerField
 from wtforms.validators import DataRequired, ValidationError
 from Bookflix.models import Genre, Publisher, Book
@@ -43,6 +44,8 @@ class BookForm(FlaskForm):
 class NewsForm(FlaskForm):
     title = StringField('Título:', validators=[DataRequired()])
     content = TextAreaField('Contenido:', validators=[DataRequired()])
+
+    picture = FileField('Imagen:', validators=[FileAllowed(['jpg', 'png'])])
 
     submit = SubmitField('Subir novedad')
 

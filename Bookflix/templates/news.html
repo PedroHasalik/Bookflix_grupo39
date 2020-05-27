@@ -7,6 +7,9 @@
             </div>
             <h2 class="article-title">{{ news.title }}</h2>
             <p class="article-content">{{ news.content }}</p>
+            {% if news.image_file != 'default.jpg' %}
+                <img src="{{ url_for('static', filename='news_pics/' + news.image_file) }}">
+            {% endif %}
         </div>
     </article>
 {% endblock content %}
