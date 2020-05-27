@@ -9,11 +9,13 @@ def load_user(user_id):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
+
     email=db.Column(db.String(50),unique=True, nullable = False)
     password=db.Column(db.String(60), nullable = False)
     accountType=db.Column(db.String, nullable = False) #valores posibles: 'Admin', 'Premium', 'Normal'
     name=db.Column(db.String(60), nullable = False)
     current_profile_id=db.Column(db.Integer, nullable = True, default = None) #Es un id de Profile
+
     card=db.relationship('Card', backref='owner', lazy = True)
     profiles=db.relationship('Profile', backref='owner', lazy = True )
 
@@ -24,6 +26,7 @@ class User(db.Model, UserMixin):
 class Profile(db.Model):
     id=db.Column(db.Integer, primary_key = True)
     owner_id= db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+
     name=db.Column(db.String(50),unique=True, nullable = False)
     image_file = db.Column(db.String(20), nullable = False, default='default.png')
 
@@ -35,6 +38,7 @@ class Profile(db.Model):
 class Card(db.Model):
     id=db.Column(db.Integer, primary_key = True)
     owner_id= db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+
     number = db.Column(db.Integer, nullable = False)
     security_number = db.Column(db.Integer, nullable = False)
     expiration_date = db.Column(db.DateTime, nullable = False)
@@ -42,6 +46,7 @@ class Card(db.Model):
 
 class Author(db.Model):
     id=db.Column(db.Integer, primary_key = True)
+
     name=db.Column(db.String(20), nullable = False) #Nombre
     surname= db.Column(db.String(20)) #Apellido
 
@@ -78,6 +83,7 @@ class Book(db.Model):
 
     title= db.Column(db.String, nullable = False)
     image_file= db.Column(db.String(20), nullable = False, default='default.jpg')
+    isbn= db.Column(db.String, nullable = False)
 
 
     #reviews=db.relationship('Review',lazy = True)
@@ -106,6 +112,7 @@ class Review(db.Model):
 
 class News(db.Model):
     id =db.Column(db.Integer, primary_key=True)
+    
     title = db.Column(db.String(40), nullable= False)
     content = db.Column(db.String(140), nullable= False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)

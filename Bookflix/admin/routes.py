@@ -120,7 +120,7 @@ def new_book():
                 else:
                         thePublisher = Publisher.query.get(form.publisher.data)
 
-                book = Book(title=form.title.data, theAuthor = theAuthor, theGenre = theGenre, thePublisher = thePublisher)
+                book = Book(title=form.title.data, isbn = form.isbn.data, theAuthor = theAuthor, theGenre = theGenre, thePublisher = thePublisher)
                 db.session.add(book)
                 db.session.commit()
                 flash('Book added successfully', 'success')
@@ -197,6 +197,7 @@ def edit_book(id):
         form.publisher.choices = publisherChoices
         if form.validate_on_submit():
                 book.title = form.title.data
+                book.isbn = form.isbn.data
 
                 if (form.author.data == 0):
                         book.theAuthor = None
@@ -218,6 +219,7 @@ def edit_book(id):
                 return redirect(url_for('admin.book_list'))
         elif request.method == 'GET':
                 form.title.data = book.title
+                form.isbn.data = book.isbn
                 
                 if (book.theAuthor):
                         form.author.data = book.theAuthor.id
