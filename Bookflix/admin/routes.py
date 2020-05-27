@@ -2,7 +2,7 @@ from flask import render_template, request, Blueprint, flash, redirect, url_for
 from Bookflix import db
 from Bookflix.decorators import full_login_required, admin_required
 from Bookflix.models import Book, Author, Genre, Publisher, News
-from Bookflix.admin.forms import GenreForm, AuthorForm, PublisherForm, BookForm, NewsForm
+from Bookflix.admin.forms import GenreForm, AuthorForm, PublisherForm, BookForm, NewsForm, GenreUpdateForm, PublisherUpdateForm, BookUpdateForm
 
 admin = Blueprint('admin', __name__)
 
@@ -144,7 +144,9 @@ def new_news():
 @admin_required()
 def edit_genre(id):
         genre = Genre.query.get_or_404(id)
-        form = GenreForm()
+        #form = GenreForm()
+        form = GenreUpdateForm()
+        form.current_id.data = id
         if form.validate_on_submit():
                 genre.name = form.name.data
                 db.session.commit()
@@ -174,7 +176,8 @@ def edit_author(id):
 @admin_required()
 def edit_publisher(id):
         publisher = Publisher.query.get_or_404(id)
-        form = PublisherForm()
+        form = PublisherUpdateForm()
+        form.current_id.data = id
         if form.validate_on_submit():
                 publisher.name = form.name.data
                 db.session.commit()
@@ -188,7 +191,8 @@ def edit_publisher(id):
 @admin_required()
 def edit_book(id):
         book = Book.query.get_or_404(id)
-        form = BookForm()
+        form = BookUpdateForm()
+        form.current_id.data = id
         authorChoices = ([(0, 'None')]+ [(each.id, each.full_name()) for each in Author.query.all()])
         genreChoices = ([(0, 'None')]+ [(each.id, each.full_name()) for each in Genre.query.all()])
         publisherChoices = ([(0, 'None')]+ [(each.id, each.full_name()) for each in Publisher.query.all()])
