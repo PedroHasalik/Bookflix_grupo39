@@ -1,7 +1,8 @@
-from flask import render_template, request, Blueprint
+from flask import render_template, request, Blueprint, redirect, url_for
 from flask_login import login_required, current_user
 from Bookflix.decorators import full_login_required 
-from Bookflix.models import News, User, Profile
+from Bookflix.models import News, User, Profile, Book
+from Bookflix.main.forms import SearchForm
 
 main = Blueprint('main', __name__)
 
@@ -24,3 +25,22 @@ def profiles():
 def news(news_id):
     news = News.query.get_or_404(news_id)
     return render_template ('news.html', title=news.title, news=news)
+
+@main.route('/search', methods=['GET', 'POST'])
+@full_login_required()
+def search():
+    form = SearchForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        return redirect(url_for('main.search_results', query=form.search.data))
+    return render_template('search.html', legend="Nueva Búsqueda", form=form)
+
+@main.route('/search_results/<query>')
+@full_login_required()
+def search_results(query):
+    results = Book.query.filter_by(isbn=query)
+    return render_template('search_results.html', results=results, query=query)
+
+
+
+
+

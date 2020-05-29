@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% if results.items|length == 0%}
+        <h2>No se encontraron coincidencias.</h2>
+    {% else %}
+        <h2>Resultados de búsqueda para {{ query }}</h2>
+        {% for result in results.items %}
+            <article class="media content-section">
+                <div class="media-body">
+                    <div class="article-metadata">
+                        DEBUG
+                    </div>
+                    <h2><a class="article-title" href="">{{ result.title }}</a></h2>
+                    <p class="article-content">{{ result.author }}</p>
+            </article>
+        {% endfor %}
+    {% endif %}
+{% endblock content %}
