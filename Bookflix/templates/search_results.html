@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% if results.items|length == 0%}
+    {% if results|length == 0 %}
         <h2>No se encontraron coincidencias.</h2>
     {% else %}
-        <h2>Resultados de búsqueda para {{ query }}</h2>
-        {% for result in results.items %}
+        <h2>Resultados de búsqueda para {{ query }} ({{results|length}})</h2>
+        {% for result in results %}
             <article class="media content-section">
                 <div class="media-body">
                     <div class="article-metadata">

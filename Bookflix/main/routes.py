@@ -37,7 +37,7 @@ def search():
 @main.route('/search_results/<query>')
 @full_login_required()
 def search_results(query):
-    results = Book.query.filter_by(isbn=query)
+    results = Book.query.filter(Book.title.contains(query)).all()
     return render_template('search_results.html', results=results, query=query)
 
 
