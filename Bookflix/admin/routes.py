@@ -2,7 +2,7 @@ from flask import render_template, request, Blueprint, flash, redirect, url_for
 from Bookflix import db
 from Bookflix.decorators import full_login_required, admin_required
 from Bookflix.models import Book, Author, Genre, Publisher, News
-from Bookflix.admin.forms import GenreForm, AuthorForm, PublisherForm, BookForm, NewsForm, GenreUpdateForm, PublisherUpdateForm, BookUpdateForm
+from Bookflix.admin.forms import GenreForm, AuthorForm, PublisherForm, BookForm, NewsForm, GenreUpdateForm, PublisherUpdateForm, BookUpdateForm, ConfirmDeleteForm
 from Bookflix.admin.utils import save_picture
 
 
@@ -270,50 +270,65 @@ def edit_news(id):
 
 #BORRAR las cosas de la base de datos
 
-@admin.route("/admin/genre/delete/<int:id>")
+@admin.route("/admin/genre/delete/<int:id>",  methods=['GET', 'POST'])
 @admin_required()
 def delete_genre(id):
         genre = Genre.query.get_or_404(id)
-        db.session.delete(genre)
-        db.session.commit()
-        flash('Genre successfully deleted!', 'success')
-        return redirect(url_for('admin.genre_list'))
+        form = ConfirmDeleteForm()
+        if form.validate_on_submit():
+                db.session.delete(genre)
+                db.session.commit()
+                flash('Genre successfully deleted!', 'success')
+                return redirect(url_for('admin.genre_list'))
+        return render_template('admin/confirm_delete.html', title='BORRAR '+genre.full_name(), form=form, legend='¿Esta seguro que quiere borrar '+genre.full_name()+'?')
 
-@admin.route("/admin/author/delete/<int:id>")
+@admin.route("/admin/author/delete/<int:id>",  methods=['GET', 'POST'])
 @admin_required()
 def delete_author(id):
         author = Author.query.get_or_404(id)
-        db.session.delete(author)
-        db.session.commit()
-        flash('Author successfully deleted!', 'success')
-        return redirect(url_for('admin.author_list'))
+        form = ConfirmDeleteForm()
+        if form.validate_on_submit():
+                db.session.delete(author)
+                db.session.commit()
+                flash('Author successfully deleted!', 'success')
+                return redirect(url_for('admin.author_list'))
+        return render_template('admin/confirm_delete.html', title='BORRAR '+author.full_name(), form=form, legend='¿Esta seguro que quiere borrar '+author.full_name()+'?')
 
-@admin.route("/admin/publisher/delete/<int:id>")
+@admin.route("/admin/publisher/delete/<int:id>",  methods=['GET', 'POST'])
 @admin_required()
 def delete_publisher(id):
         publisher = Publisher.query.get_or_404(id)
-        db.session.delete(publisher)
-        db.session.commit()
-        flash('Publisher successfully deleted!', 'success')
-        return redirect(url_for('admin.publisher_list'))
+        form = ConfirmDeleteForm()
+        if form.validate_on_submit():
+                db.session.delete(publisher)
+                db.session.commit()
+                flash('Publisher successfully deleted!', 'success')
+                return redirect(url_for('admin.publisher_list'))
+        return render_template('admin/confirm_delete.html', title='BORRAR '+publisher.full_name(), form=form, legend='¿Esta seguro que quiere borrar '+publisher.full_name()+'?')
 
-@admin.route("/admin/book/delete/<int:id>")
+@admin.route("/admin/book/delete/<int:id>",  methods=['GET', 'POST'])
 @admin_required()
 def delete_book(id):
         book = Book.query.get_or_404(id)
-        db.session.delete(book)
-        db.session.commit()
-        flash('Book successfully deleted!', 'success')
-        return redirect(url_for('admin.book_list'))
+        form = ConfirmDeleteForm()
+        if form.validate_on_submit():
+                db.session.delete(book)
+                db.session.commit()
+                flash('Book successfully deleted!', 'success')
+                return redirect(url_for('admin.book_list'))
+        return render_template('admin/confirm_delete.html', title='BORRAR '+book.full_name(), form=form, legend='¿Esta seguro que quiere borrar '+book.full_name()+'?')
 
-@admin.route("/admin/news/delete/<int:id>")
+@admin.route("/admin/news/delete/<int:id>",  methods=['GET', 'POST'])
 @admin_required()
 def delete_news(id):
         news = News.query.get_or_404(id)
-        db.session.delete(news)
-        db.session.commit()
-        flash('News successfully deleted!', 'success')
-        return redirect(url_for('admin.news_list'))
+        form = ConfirmDeleteForm()
+        if form.validate_on_submit():
+                db.session.delete(news)
+                db.session.commit()
+                flash('News successfully deleted!', 'success')
+                return redirect(url_for('admin.news_list'))
+        return render_template('admin/confirm_delete.html', title='BORRAR '+news.full_name(), form=form, legend='¿Esta seguro que quiere borrar '+news.full_name()+'?')
 
 #Everything below this is commented out
 '''

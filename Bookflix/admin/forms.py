@@ -90,3 +90,6 @@ class BookUpdateForm(FlaskForm):
             if book2:
                 raise ValidationError('Ya existe un libro con ese ISBN.')
     submit = SubmitField('Confirmar')
+
+class ConfirmDeleteForm(FlaskForm):
+    submit = SubmitField('ELIMINAR')

@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action= "">
+            {{ form.hidden_tag() }}
+            <legend class="border-bottom mb-4">{{legend}}</legend>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-danger") }}
+            <a class="btn btn-outline-info" href="{{ url_for('admin.admin_dashboard') }}">Cancelar</a>
+        </div>
+        </form>
+    </div>
+{% endblock content %}
