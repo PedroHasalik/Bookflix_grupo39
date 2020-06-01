@@ -8,10 +8,12 @@
             <article class="media content-section">
                 <div class="media-body">
                     <div class="article-metadata">
-                        DEBUG
+                        {% if result.theAuthor != None %}
+                            <p class="article-content">{{ result.theAuthor.full_name() }}</p>
+                        {% endif %}
                     </div>
-                    <h2><a class="article-title" href="">{{ result.title }}</a></h2>
-                    <p class="article-content">{{ result.author }}</p>
+                    <h2><a class="article-title" href=" {{ url_for('main.book', id=result.id)}}">{{ result.title }}</a></h2>
+                    
             </article>
         {% endfor %}
     {% endif %}

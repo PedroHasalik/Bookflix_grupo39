@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block content %}
+        
+    <article class="media content-section">
+        <div class="media-body">
+            <div class="article-metadata">
+                <p class="article-content">{{ book.theAuthor.full_name() }}</p>
+            </div>
+            <h2><a class="article-title">{{ book.title }}</a></h2>
+            <p> Editorial: {{ book.thePublisher.full_name()}}</p>
+            <p> Género: {{ book.theGenre.full_name()}}</p>
+
+            <div class="article-metadata">
+                <h2>Capítulos:</h2>
+            </div>
+            
+            <!-- Acá va la lista de capítulos -->
+
+    </article>
+{% endblock content %}

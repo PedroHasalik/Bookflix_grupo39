@@ -40,6 +40,13 @@ def search_results(query):
     results = Book.query.filter(Book.title.contains(query)).all()
     return render_template('search_results.html', results=results, query=query)
 
+@main.route('/book/<id>')
+@full_login_required()
+def book(id):
+    theBook = Book.query.get_or_404(id)
+    return render_template('book.html', book=theBook)
+
+
 
 
 
