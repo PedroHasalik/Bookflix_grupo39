@@ -17,3 +17,22 @@ def save_picture(form_picture):
     i.save(picture_path)
 
     return picture_fn
+
+def save_pdf(form_pdf):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_pdf.filename)
+    pdf_fn = random_hex + f_ext
+    pdf_path = os.path.join(current_app.root_path, 'static/chapter_pdfs', pdf_fn)
+
+    form_pdf.save(pdf_path)
+
+    return pdf_fn
+
+def save_chapter(form_pdf, filename):
+    _, f_ext = os.path.splitext(form_pdf.filename)
+    pdf_fn = filename + f_ext
+    pdf_path = os.path.join(current_app.root_path, 'static/chapter_pdfs', pdf_fn)
+
+    form_pdf.save(pdf_path)
+
+    return pdf_fn

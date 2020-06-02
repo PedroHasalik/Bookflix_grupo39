@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, SubmitField, SelectField, TextAreaField, IntegerField
 from wtforms.validators import DataRequired, ValidationError
-from Bookflix.models import Genre, Publisher, Book
+from Bookflix.models import Genre, Publisher, Book, Chapter
 
 #CREATE FORMS
 class GenreForm(FlaskForm):
@@ -40,6 +40,19 @@ class BookForm(FlaskForm):
         if book:
             raise ValidationError('Ya existe un libro con ese ISBN.')
     submit = SubmitField('Confirmar')
+
+class ChapterForm(FlaskForm):
+    number = IntegerField('Numero', validators= [ DataRequired()])
+    title = StringField('Titulo')
+    book_id = IntegerField( validators= [ DataRequired()])
+    pdf_file = FileField('Archivo PDF', validators=[DataRequired(), FileAllowed(['pdf'])])
+
+    submit = SubmitField('Confirmar')
+
+    def validate_number(self, number):
+        chapter = Chapter.query.filter((Chapter.book_id == self.book_id.data) & (Chapter.chapterNumber == number.data)).first()
+        if chapter:
+            raise ValidationError('Ya existe un capitulo con ese numero en este libro.')
 
 class NewsForm(FlaskForm):
     title = StringField('Título:', validators=[DataRequired()])
@@ -90,6 +103,22 @@ class BookUpdateForm(FlaskForm):
             if book2:
                 raise ValidationError('Ya existe un libro con ese ISBN.')
     submit = SubmitField('Confirmar')
+
+class ChapterUpdateForm(FlaskForm):
+    number = IntegerField('Numero', validators= [ DataRequired()])
+    current_id = IntegerField()
+    title = StringField('Titulo')
+    book_id = IntegerField()
+    pdf_file = FileField('Archivo PDF', validators=[FileAllowed(['pdf'])])
+
+    submit = SubmitField('Confirmar')
+
+    def validate_number(self, number):
+        chapter = Chapter.query.get(self.current_id.data)
+        if (chapter.chapterNumber != number.data):
+            chapter2 = Chapter.query.filter((Chapter.book_id == self.book_id.data) & (Chapter.chapterNumber == number.data)).first()
+            if chapter2:
+                raise ValidationError('Ya existe un capitulo con ese numero en este libro.')
 
 class ConfirmDeleteForm(FlaskForm):
     submit = SubmitField('ELIMINAR')

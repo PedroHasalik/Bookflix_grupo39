@@ -5,11 +5,11 @@
     {% for item in items.items %}
         <article class="media content-section">
             <div class="media-body">
-                <a class="article-metadata" href="{{ url_for('admin.edit_'+listOf, id=item.id) }}">{{ item.full_name() }}</a>
-                {% if listOf == 'book' %}
+                <a class="article-metadata" href="{{ url_for('admin.edit_chapter', id=item.id, book_id=book_id) }}">{{ item.full_name() }}</a>
+                {% if typeOf == 'book' %}
                 <a class="btn btn-info" href="{{ url_for('admin.chapter_list', book_id=item.id) }} ">Capitulos</a>
                 {% endif %}
-                <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('admin.delete_'+listOf, id=item.id) }}">Delete</a>
+                <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('admin.delete_chapter', id=item.id, book_id=book_id) }}">Delete</a>
                 
             </div>
         </article>
@@ -17,9 +17,9 @@
     {% for page_num in items.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2)  %}
         {% if page_num %}
             {% if items.page == page_num %}
-                <a class="btn btn-info mb-4" href="{{ url_for('admin.'+listOf+'_list', page=page_num) }}">{{ page_num }} </a>
+                <a class="btn btn-info mb-4" href="{{ url_for('admin.chapter_list', book_id=book_id, page=page_num) }}">{{ page_num }} </a>
             {% else %}
-                <a class="btn btn-outline-info mb-4" href="{{ url_for('admin.'+listOf+'_list', page=page_num) }}">{{ page_num }} </a>
+                <a class="btn btn-outline-info mb-4" href="{{ url_for('admin.chapter_list', book_id=book_id, page=page_num) }}">{{ page_num }} </a>
             {% endif %}
         {% else %}
             ...
@@ -27,7 +27,7 @@
     {% endfor %}
 
     <div class = "content-section">
-        <a class="btn btn-outline-info" href="{{ url_for('admin.new_'+listOf) }}">Crear nuevo {{listOf}}</a>
+        <a class="btn btn-outline-info" href="{{ url_for('admin.new_chapter', book_id=book_id) }}">Crear nuevo chapter</a>
         <a class="btn btn-outline-info" href="{{ url_for('admin.admin_dashboard') }}">Admin menu</a>
     </div>
 {% endblock content %}

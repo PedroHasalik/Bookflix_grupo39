@@ -100,6 +100,9 @@ class Chapter(db.Model):
     chapterTitle = db.Column(db.String)
     pdf_file = db.Column(db.String, nullable = False)
 
+    def full_name(self):
+        return ('Capitulo '+str(self.chapterNumber)+' - '+self.chapterTitle)
+
 '''
 class Review(db.Model):
     id=db.Column(db.Integer, primary_key = True)
