@@ -87,7 +87,7 @@ def register_profile():
         db.session.add(profile)
         db.session.commit()
         return redirect(url_for('main.profiles'))
-    return render_template('register_profile.html', title='Account', form=form)
+    return render_template('register_profile.html', form=form, profile =  current_user.current_profile(), title= 'Crear perfil', legend= 'Crear perfil')
 
 @users.route("/update_profile", methods=['GET', 'POST'])
 @full_login_required()
@@ -105,7 +105,7 @@ def update_profile():
         return redirect(url_for('main.home'))
     elif request.method == 'GET':
         form.name.data = current_user.current_profile().name
-    return render_template('update_profile.html', title='Account', form=form, profile =  current_user.current_profile() )
+    return render_template('update_profile.html', form=form, profile =  current_user.current_profile(), title= 'Editar perfil', legend= 'Editar perfil')
 
 @users.route("/set_profile/<int:id>")
 @login_required

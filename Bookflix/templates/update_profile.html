@@ -1,64 +1,45 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Register Profile</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='auth.css') }}">
-</head>
-<body>
-<div class="container">
-	<div class="d-flex justify-content-center h-100">
-		<div class="card">
-			<div class="card-header">
-				<h3>Crear usuario</h3>
-			</div>
-			<div class="card-body">
-				{% with messages = get_flashed_messages(with_categories=true) %}
-					{% if messages %}
-					{% for category, message in messages %}
-						<div class="alert alert-{{ category }}">
-						{{ message }}
-						</div>
-					{% endfor %}
-					{% endif %}
-				{% endwith %}
-				<div class="card-body">
-                    <h2 class="rb">{{ profile.name }}</h2>
-					<form method="POST" action="">
-						{{ form.hidden_tag() }}
-						<div class="input-group form-group">
-							{% if form.name.errors %}
-								{{ form.name(class="form-control form-control-lg is-invalid") }}
-								<div class="invalid-feedback">
-									{% for error in form.name.errors %}
-										<span>{{ error }}</span>
-									{% endfor %}
-								</div>
-							{% else %}
-							<div class="input-group-prepend">
-								<span class="input-group-text"><i class="fas fa-user"></i></span>
-							</div>
-							{{ form.name(class="form-control", placeholder="Nombre") }}
-							{% endif %}
-						</div>
-						<div class="input-group form-group">
-							{{ form.picture.label() }}
-                                {{ form.picture(class="form-control-file") }}
-                                {% if form.picture.errors %}
-                                    {% for error in form.picture.errors %}
-                                        <span class="text-danger">{{ error }}</span></br>
-                                    {% endfor %}
-                                {% endif %}
-						</div>
-						<div class="form-group">
-							{{ form.submit(class="btn float-right login_btn") }}
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-</body>
-</html>
+{% extends "layout_profiles.html"%}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">{{ legend }}</legend>
+                <div class="form-group">
+                    {{ form.name.label(class= "form-control-label")}}
+                    {% if form.name.errors%}
+                        {{ form.name(class= "form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.name.errors%}
+                                <span>
+                                    {{ error }}
+                                </span>
+                            {% endfor%}
+                        </div>
+                    {% else%}
+                        {{ form.name(class= "form-control form-control-lg")}}
+                    {% endif%}
+                </div>
+                <div class="form-group">
+                    {{ form.picture.label(class= "form-control-label")}}
+                    {% if form.picture.errors%}
+                        {{ form.picture(class= "form-control form-control-lg is-invalid")}}
+                        <div class="invalid-feedback">
+                            {% for error in form.picture.errors%}
+                                <span>
+                                    {{ error }}
+                                </span>
+                            {% endfor%}
+                        </div>
+                    {% else%}
+                        {{ form.picture(class= "form-control-file")}}
+                    {% endif%}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info")}}
+            </div>
+
+        </form>
+    </div>
+{% endblock content %}
