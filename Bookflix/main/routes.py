@@ -1,7 +1,7 @@
 from flask import render_template, request, Blueprint, redirect, url_for
 from flask_login import login_required, current_user
 from Bookflix.decorators import full_login_required 
-from Bookflix.models import News, User, Profile, Book
+from Bookflix.models import News, User, Profile, Book, Publisher, Genre, Author
 from Bookflix.main.forms import SearchForm
 
 main = Blueprint('main', __name__)
@@ -37,7 +37,7 @@ def search():
 @main.route('/search_results/<query>')
 @full_login_required()
 def search_results(query):
-    results = Book.query.filter(Book.title.contains(query)).all()
+    results = Book.query.filter((Book.title.contains(query)) | (Book.thePublisher.has(Publisher.name.contains(query))) | (Book.theGenre.has(Genre.name.contains(query))) | (Book.theAuthor.has(Author.name.contains(query))) ).all()
     return render_template('search_results.html', results=results, query=query)
 
 @main.route('/book/<id>')
