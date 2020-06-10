@@ -1,4 +1,4 @@
-from flask import current_app
+from flask import current_app, session
 from Bookflix import db, login_manager
 from flask_login import UserMixin
 from datetime import datetime
@@ -14,13 +14,12 @@ class User(db.Model, UserMixin):
     password=db.Column(db.String(60), nullable = False)
     accountType=db.Column(db.String, nullable = False) #valores posibles: 'Admin', 'Premium', 'Normal'
     name=db.Column(db.String(60), nullable = False)
-    current_profile_id=db.Column(db.Integer, nullable = True, default = None) #Es un id de Profile
 
     card=db.relationship('Card', backref='owner', lazy = True)
     profiles=db.relationship('Profile', backref='owner', lazy = True )
 
     def current_profile(self):
-        return Profile.query.get(self.current_profile_id)
+        return Profile.query.get(session['_current_profile_id'])
 
 
 class Profile(db.Model):

@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint
+from flask import render_template, url_for, flash, redirect, request, Blueprint, session
 from flask_login import login_user, current_user, logout_user, login_required
 from Bookflix.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm, ProfileRegistrationForm, ProfileUpdateForm)
 from Bookflix.models import User, Card, Profile
@@ -31,6 +31,7 @@ def login():
     #if current_user.is_authenticated:
     #    return redirect(url_for('main.home'))
     if form.validate_on_submit():
+        session['_current_profile_id'] = None
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
@@ -112,8 +113,7 @@ def update_profile():
 def set_profile(id):
     profile=Profile.query.get_or_404(id)
     if(profile.owner == current_user):
-        current_user.current_profile_id = id
-    db.session.commit()
+        session['_current_profile_id'] = profile.id
     return redirect (url_for("main.home"))
 
 
