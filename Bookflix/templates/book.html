@@ -7,6 +7,9 @@
                 <p class="article-content">{{ book.theAuthor.full_name() }}</p>
             </div>
             <h2><a class="article-title">{{ book.title }}</a></h2>
+            {% if book.image_file != 'default.jpg' %}
+                <img src="{{ book.image_file }}">
+            {% endif %}
             <p> Editorial: {{ book.thePublisher.full_name()}}</p>
             <p> Género: {{ book.theGenre.full_name()}}</p>
 
@@ -14,7 +17,8 @@
                 <h2>Capítulos:</h2>
             </div>
             
-            <!-- Acá va la lista de capítulos -->
-
+            {% for chapter in book.chapters %}
+                <p><a href="{{ url_for('main.chapter', book_id=book.id, chapter_id=chapter.id)}}">{{ chapter.chapterNumber}} - {{ chapter.chapterTitle }}</a></p>
+            {% endfor %}
     </article>
 {% endblock content %}
