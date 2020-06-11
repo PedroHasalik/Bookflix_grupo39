@@ -1,7 +1,7 @@
 from flask import render_template, request, Blueprint, redirect, url_for
 from flask_login import login_required, current_user
 from Bookflix.decorators import full_login_required 
-from Bookflix.models import News, User, Profile, Book, Publisher, Genre, Author
+from Bookflix.models import News, User, Profile, Book, Publisher, Genre, Author, Chapter
 from Bookflix.main.forms import SearchForm
 
 main = Blueprint('main', __name__)
@@ -45,6 +45,13 @@ def search_results(query):
 def book(id):
     theBook = Book.query.get_or_404(id)
     return render_template('book.html', book=theBook)
+
+@main.route('/book/<book_id>/chapter/<chapter_id>')
+@full_login_required()
+def chapter(book_id, chapter_id):
+    theBook = Book.query.get_or_404(book_id)
+    theChapter = Chapter.query.get_or_404(chapter_id)
+    return render_template('chapter.html', book=theBook, chapter=theChapter)
 
 
 
