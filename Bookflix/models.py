@@ -90,8 +90,9 @@ class Book(db.Model):
     publisher_id= db.Column(db.Integer, db.ForeignKey('publisher.id'), nullable = True)
 
     title= db.Column(db.String, nullable = False)
-    image_file= db.Column(db.String(20), nullable = False, default='default.jpg')
+    image_file= db.Column(db.String(20), nullable = False, default='default.png')
     isbn= db.Column(db.String, nullable = False)
+    public = db.Column(db.Boolean, nullable = False, default=False)
 
 
     #reviews=db.relationship('Review',lazy = True)

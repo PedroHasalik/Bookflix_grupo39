@@ -3,7 +3,7 @@ from Bookflix import db
 from Bookflix.decorators import full_login_required, admin_required
 from Bookflix.models import Book, Author, Genre, Publisher, News, Genre, Chapter
 from Bookflix.admin.forms import GenreForm, AuthorForm, PublisherForm, BookForm, NewsForm, GenreUpdateForm, PublisherUpdateForm, BookUpdateForm, ConfirmDeleteForm, ChapterForm, ChapterUpdateForm
-from Bookflix.admin.utils import save_picture, save_chapter
+from Bookflix.admin.utils import save_picture, save_chapter, save_book_picture
 
 
 admin = Blueprint('admin', __name__)
@@ -129,8 +129,13 @@ def new_book():
                         thePublisher = None
                 else:
                         thePublisher = Publisher.query.get(form.publisher.data)
+                
+                if (form.image_file.data):
+                        image_file = save_book_picture(form.image_file.data)
+                else:
+                        image_file = 'default.png'
 
-                book = Book(title=form.title.data, isbn = form.isbn.data, theAuthor = theAuthor, theGenre = theGenre, thePublisher = thePublisher)
+                book = Book(title=form.title.data, isbn = form.isbn.data, theAuthor = theAuthor, theGenre = theGenre, thePublisher = thePublisher, image_file = image_file)
                 db.session.add(book)
                 db.session.commit()
                 flash('Book added successfully', 'success')
@@ -229,6 +234,10 @@ def edit_book(id):
         if form.validate_on_submit():
                 book.title = form.title.data
                 book.isbn = form.isbn.data
+                book.public = form.public.data
+
+                if (form.image_file.data):
+                        book.image_file=save_book_picture(form.image_file.data)
 
                 if (form.author.data == 0):
                         book.theAuthor = None
@@ -251,6 +260,7 @@ def edit_book(id):
         elif request.method == 'GET':
                 form.title.data = book.title
                 form.isbn.data = book.isbn
+                form.public.data = book.public
                 
                 if (book.theAuthor):
                         form.author.data = book.theAuthor.id
@@ -267,7 +277,7 @@ def edit_book(id):
                 else:
                         form.publisher.data = 0
 
-        return render_template('admin/new_book.html', form=form, legend='Editar Genero', title=book.title)
+        return render_template('admin/new_book.html', form=form, legend='Editar Libro', title=book.title)
 
 @admin.route("/admin/book/<int:book_id>/chapter/edit/<int:id>",  methods=['GET', 'POST'])
 @admin_required()
@@ -279,8 +289,7 @@ def edit_chapter(book_id, id):
         form.book_id.data = book_id
         if form.validate_on_submit(): 
                 if form.pdf_file.data:
-                        pdf_file = save_chapter(form.pdf_file.data, 'book_'+str(book_id)+'_chapter_'+str(form.number.data))
-                        chapter.pdf_file=pdf_file
+                        chapter.pdf_file = save_chapter(form.pdf_file.data, 'book_'+str(book_id)+'_chapter_'+str(form.number.data))
                 chapter.chapterNumber=form.number.data
                 chapter.chapterTitle=form.title.data
                 db.session.commit()

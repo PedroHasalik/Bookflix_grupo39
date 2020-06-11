@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, SubmitField, SelectField, TextAreaField, IntegerField
+from wtforms import StringField, SubmitField, SelectField, TextAreaField, IntegerField, BooleanField
 from wtforms.validators import DataRequired, ValidationError
 from Bookflix.models import Genre, Publisher, Book, Chapter
 
@@ -34,6 +34,7 @@ class BookForm(FlaskForm):
     author= SelectField('Autor', default='', coerce=int) #Las opciones son 'none' y todos los autores, se crea en la ruta
     genre= SelectField('Genero', default='', coerce=int)#Las opciones son 'none' y todos los generos, se crea en la ruta
     publisher= SelectField('Editorial', default='', coerce=int)#Las opciones son 'none' y todas las editoriales , se crea en la ruta
+    image_file = FileField('Imagen', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     
     def validate_isbn(self, isbn):
         book = Book.query.filter_by(isbn=isbn.data).first()
@@ -58,7 +59,7 @@ class NewsForm(FlaskForm):
     title = StringField('Título:', validators=[DataRequired()])
     content = TextAreaField('Contenido:', validators=[DataRequired()])
 
-    picture = FileField('Imagen:', validators=[FileAllowed(['jpg', 'png'])])
+    picture = FileField('Imagen:', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
 
     submit = SubmitField('Subir novedad')
 
@@ -95,6 +96,8 @@ class BookUpdateForm(FlaskForm):
     author= SelectField('Autor', default='', coerce=int) #Las opciones son 'none' y todos los autores, se crea en la ruta
     genre= SelectField('Genero', default='', coerce=int)#Las opciones son 'none' y todos los generos, se crea en la ruta
     publisher= SelectField('Editorial', default='', coerce=int)#Las opciones son 'none' y todas las editoriales , se crea en la ruta
+    image_file = FileField('Imagen', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
+    public =  BooleanField('¿Visible para los usuarios?')
     
     def validate_isbn(self, isbn):
         book = Book.query.get(self.current_id.data)
