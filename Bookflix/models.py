@@ -34,6 +34,15 @@ class Profile(db.Model):
     #doneReading=db.relationship('Book',lazy = True)
     #reviews=db.relationship('Review', backref='writer',lazy = True)
 
+class NavigationHistoryEntry(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'), nullable = False)
+
+    url = db.Column(db.String, nullable = False)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    entryType = db.Column(db.String, nullable = False) #book o chapter
+    entryName = db.Column(db.String, nullable = False) #El nombre del libro o el numero y nombre del capitulo
+
 class Card(db.Model):
     id=db.Column(db.Integer, primary_key = True)
     owner_id= db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
@@ -122,6 +131,7 @@ class News(db.Model):
 
     def full_name(self):
         return self.title
+
 
 
 
