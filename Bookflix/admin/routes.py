@@ -130,7 +130,7 @@ def new_book():
                 else:
                         thePublisher = Publisher.query.get(form.publisher.data)
                 
-                if (form.image_file.data):
+                if form.image_file.data:
                         image_file = save_book_picture(form.image_file.data)
                 else:
                         image_file = 'default.png'
@@ -236,7 +236,7 @@ def edit_book(id):
                 book.isbn = form.isbn.data
                 book.public = form.public.data
 
-                if (form.image_file.data):
+                if form.image_file.data:
                         book.image_file=save_book_picture(form.image_file.data)
 
                 if (form.author.data == 0):
