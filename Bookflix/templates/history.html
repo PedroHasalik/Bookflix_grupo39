@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content  %}
+    <h3>Historial de libros</h3>
+    <div class="content-section">
+        <ul>
+            {% for item in nav_history%}
+                <li><a href="{{ url_for('main.book', id=item.item_id)}}">{{item.entryName}}</a><small class="text-muted">{{item.date_posted.strftime("%m/%d/%Y, %H:%M")}}</small></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock content %}          

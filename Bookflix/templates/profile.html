@@ -1,0 +1,8 @@
+{% extends "layout_profiles.html"%}
+{% block content %}
+    <h3>Seleccione una opción</h3>
+    <div class="content-section">
+        <a class="btn btn-outline-info" href="{{url_for('users.update_profile')}}">Modificar Perfil</a>
+        <a class="btn btn-outline-info" href="{{url_for('users.history')}}">Ver historial</a>
+    </div>
+{% endblock content %}

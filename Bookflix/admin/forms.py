@@ -96,7 +96,7 @@ class BookUpdateForm(FlaskForm):
     author= SelectField('Autor', default='', coerce=int) #Las opciones son 'none' y todos los autores, se crea en la ruta
     genre= SelectField('Genero', default='', coerce=int)#Las opciones son 'none' y todos los generos, se crea en la ruta
     publisher= SelectField('Editorial', default='', coerce=int)#Las opciones son 'none' y todas las editoriales , se crea en la ruta
-    image_file = FileField('Imagen', validators=[FileAllowed(['jpg', 'jpeg', 'png']), DataRequired()])
+    image_file = FileField('Imagen', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
     public =  BooleanField('¿Visible para los usuarios?')
     
     def validate_isbn(self, isbn):

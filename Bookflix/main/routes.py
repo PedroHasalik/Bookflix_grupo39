@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from Bookflix.decorators import full_login_required 
 from Bookflix.models import News, User, Profile, Book, Publisher, Genre, Author, Chapter
 from Bookflix.main.forms import SearchForm
+from Bookflix.users.utils import saveBookHistory
 
 main = Blueprint('main', __name__)
 
@@ -44,6 +45,7 @@ def search_results(query):
 @full_login_required()
 def book(id):
     theBook = Book.query.get_or_404(id)
+    saveBookHistory(name=theBook.full_name(),entryType='Book', id=id)
     return render_template('book.html', book=theBook)
 
 @main.route('/book/<book_id>/chapter/<chapter_id>')

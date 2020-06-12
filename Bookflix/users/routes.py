@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint, session
 from flask_login import login_user, current_user, logout_user, login_required
 from Bookflix.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm, ProfileRegistrationForm, ProfileUpdateForm)
-from Bookflix.models import User, Card, Profile
+from Bookflix.models import User, Card, Profile, NavigationHistoryEntry
 from Bookflix import bcrypt, db
 from Bookflix.users.utils import save_picture
 from Bookflix.decorators import full_login_required
@@ -88,7 +88,13 @@ def register_profile():
         db.session.add(profile)
         db.session.commit()
         return redirect(url_for('main.profiles'))
-    return render_template('register_profile.html', form=form, profile =  current_user.current_profile(), title= 'Crear perfil', legend= 'Crear perfil')
+    return render_template('register_profile.html', form=form, title= 'Crear perfil', legend= 'Crear perfil')
+
+
+@users.route("/profile")
+@full_login_required()
+def profile(): 
+    return render_template ('profile.html', title= 'Perfil', legend= 'Perfil')
 
 @users.route("/update_profile", methods=['GET', 'POST'])
 @full_login_required()
@@ -116,6 +122,11 @@ def set_profile(id):
         session['_current_profile_id'] = profile.id
     return redirect (url_for("main.home"))
 
+@users.route("/history")
+@full_login_required()
+def history():
+    nav_history = NavigationHistoryEntry.query.filter_by(owner=current_user.current_profile()).order_by(NavigationHistoryEntry.date_posted).all()
+    return render_template('history.html', nav_history=nav_history, title='Historial', legend='Historial' )
 
 @users.route("/debug")
 def debug():

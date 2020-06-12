@@ -28,7 +28,7 @@ class Profile(db.Model):
 
     name=db.Column(db.String(50),unique=True, nullable = False)
     image_file = db.Column(db.String(20), nullable = False, default='default.png')
-
+    navigationHistory = db.relationship('NavigationHistoryEntry', lazy = True, backref='owner')
     #favourites=db.relationship('Book',lazy = True) VA A SER UN QUILOMBO IMPLEMENTAR ESTO. NOTA: probablemente se solucione implementandolo como many-to-many
     #pending=db.relationship('Book',lazy = True)
     #doneReading=db.relationship('Book',lazy = True)
@@ -37,8 +37,7 @@ class Profile(db.Model):
 class NavigationHistoryEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'), nullable = False)
-
-    url = db.Column(db.String, nullable = False)
+    item_id = db.Column(db.Integer, nullable = False) #id del libro o capitulo a guardar en el historial
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     entryType = db.Column(db.String, nullable = False) #book o chapter
     entryName = db.Column(db.String, nullable = False) #El nombre del libro o el numero y nombre del capitulo

@@ -53,7 +53,7 @@ class UpdateAccountForm(FlaskForm):
 
 class ProfileRegistrationForm(FlaskForm):
     name = StringField('Name',validators=[DataRequired(), Length(min=2, max=20)])
-    picture = FileField('Upload Profile Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg']), DataRequired()])
+    picture = FileField('Upload Profile Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
     submit = SubmitField('Create')
 
 class ProfileUpdateForm(FlaskForm):
