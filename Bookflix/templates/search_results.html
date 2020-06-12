@@ -10,6 +10,8 @@
                     <div class="article-metadata">
                         {% if result.theAuthor != None %}
                             <p class="article-content">{{ result.theAuthor.full_name() }}</p>
+                        {% else %}
+                            <p class="article-content">Anónimo</p>
                         {% endif %}
                     </div>
                     <h2><a class="article-title" href=" {{ url_for('main.book', id=result.id)}}">{{ result.title }}</a></h2>

@@ -4,15 +4,34 @@
     <article class="media content-section">
         <div class="media-body">
             <div class="article-metadata">
-                <p class="article-content">{{ book.theAuthor.full_name() }}</p>
+                <!-- Autor -->
+                {% if book.theAuthor != None%}
+                    <p class="article-content">{{ book.theAuthor.full_name() }}</p>
+                {% else %}
+                    <p class="article-content">Anónimo</p>
+                {% endif %}
             </div>
+            <!-- Título -->
             <h2 class="article-title">{{ book.title }}</h2>
+            
+            <!-- Imagen -->
             {% if book.image_file != 'default.png' %}
                 <img src="{{ url_for('static', filename='book_pics/' + book.image_file) }}">
+                
             {% endif %}
-            <p> Editorial: {{ book.thePublisher.full_name()}}</p>
-            <p> Género: {{ book.theGenre.full_name()}}</p>
+            
 
+            <!-- Editorial -->
+            {% if book.thePublisher != None %}
+                <p> Editorial: {{ book.thePublisher.full_name()}}</p>
+            {% endif %}
+
+            <!-- Género -->
+            {% if book.theGenre != None %}
+                <p> Género: {{ book.theGenre.full_name()}}</p>
+            {% endif %}
+
+            <!-- Lista de capítulos -->
             <div class="article-metadata">
                 <h2>Capítulos:</h2>
             </div>
