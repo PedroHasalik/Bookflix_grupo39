@@ -48,11 +48,13 @@ def book(id):
     saveBookHistory(name=theBook.full_name(),entryType='Book', id=id)
     return render_template('book.html', book=theBook)
 
-@main.route('/book/<book_id>/chapter/<chapter_id>')
+@main.route('/chapter/<chapter_id>')
 @full_login_required()
-def chapter(book_id, chapter_id):
-    theBook = Book.query.get_or_404(book_id)
+def chapter(chapter_id):
     theChapter = Chapter.query.get_or_404(chapter_id)
+    theBook = Book.query.get_or_404(theChapter.book_id)
+    theName = thebook.full_name() + ' - ' + theChapter.full_name()
+    saveBookHistory(name=theName, entryType='Chapter', id=chapter_id)
     return render_template('chapter.html', book=theBook, chapter=theChapter)
 
 
