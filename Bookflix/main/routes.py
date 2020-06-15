@@ -53,7 +53,7 @@ def book(id):
 def chapter(chapter_id):
     theChapter = Chapter.query.get_or_404(chapter_id)
     theBook = Book.query.get_or_404(theChapter.book_id)
-    theName = thebook.full_name() + ' - ' + theChapter.full_name()
+    theName = theBook.full_name() + ' - ' + theChapter.full_name()
     saveBookHistory(name=theName, entryType='Chapter', id=chapter_id)
     return render_template('chapter.html', book=theBook, chapter=theChapter)
 
