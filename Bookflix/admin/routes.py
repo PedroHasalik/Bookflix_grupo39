@@ -168,6 +168,8 @@ def new_news():
     if form.validate_on_submit():
         if form.picture.data:
                 picture_file = save_picture(form.picture.data)
+        else:
+                picture_file = None
         news = News(title=form.title.data, content=form.content.data, image_file=picture_file, book_id = form.book.data)
         db.session.add(news)
         db.session.commit()
