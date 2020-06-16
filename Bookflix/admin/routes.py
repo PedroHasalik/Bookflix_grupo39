@@ -161,10 +161,14 @@ def new_chapter(book_id):
 @admin_required()
 def new_news():
     form = NewsForm()
+
+    bookChoices = ([(0, 'None')]+ [(each.id, each.full_name()) for each in Book.query.all()]) 
+    form.book.choices = bookChoices
+
     if form.validate_on_submit():
         if form.picture.data:
                 picture_file = save_picture(form.picture.data)
-        news = News(title=form.title.data, content=form.content.data, image_file=picture_file)
+        news = News(title=form.title.data, content=form.content.data, image_file=picture_file, book_id = form.book.data)
         db.session.add(news)
         db.session.commit()
         flash('La novedad ha sido creada.', 'success')
@@ -305,20 +309,24 @@ def edit_chapter(book_id, id):
 def edit_news(id):
     news = News.query.get_or_404(id)
     form = NewsForm()
+
+    bookChoices = ([(0, 'None')]+ [(each.id, each.full_name()) for each in Book.query.all()]) 
+    form.book.choices = bookChoices
+
     if form.validate_on_submit():
         if form.picture.data:
                 picture_file = save_picture(form.picture.data)
                 news.image_file = picture_file
-
         news.title = form.title.data
         news.content = form.content.data
-        
+        news.book_id = form.book.data #0 si no es trailer, la book id de un libro si si es un trailer
         db.session.commit()
         flash('Novedad modificada.', 'success')
         return redirect(url_for('admin.news_list'))
     elif request.method == 'GET':
         form.title.data = news.title
         form.content.data = news.content
+        form.book.data = news.book_id
 
     return render_template('admin/new_news.html', title='Editar Novedad', form=form, legend='Editar Novedad')
 

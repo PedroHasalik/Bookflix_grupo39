@@ -127,7 +127,8 @@ class News(db.Model):
     title = db.Column(db.String(40), nullable= False)
     content = db.Column(db.String(140), nullable= False)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    image_file =  image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+    book_id = db.Column(db.Integer, nullable=True) #si la novedad es un trailer, book_id es la id del book para el cual es trailer. Sino, book_id es 0
 
     def full_name(self):
         return self.title

@@ -61,6 +61,8 @@ class NewsForm(FlaskForm):
 
     picture = FileField('Imagen:', validators=[FileAllowed(['jpg', 'jpeg', 'png'])])
 
+    book = SelectField('Es trailer de:', default='', coerce=int) #Las opciones son 'none' y todos los libros, se crea en la ruta
+
     submit = SubmitField('Subir novedad')
 
 #UPDATE FORMS
