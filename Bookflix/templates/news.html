@@ -10,6 +10,9 @@
             {% if news.image_file != 'default.jpg' %}
                 <img src="{{ url_for('static', filename='news_pics/' + news.image_file) }}">
             {% endif %}
+            {% if news.book_id != 0%}
+                <p class="article-content"><a href="{{ url_for('main.book', id=news.book_id)}}">Haga clic aquí para ver el libro.</a></p>
+            {% endif %}
         </div>
     </article>
 {% endblock content %}
