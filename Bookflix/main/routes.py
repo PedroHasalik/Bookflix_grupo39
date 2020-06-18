@@ -1,4 +1,4 @@
-from flask import render_template, request, Blueprint, redirect, url_for
+from flask import render_template, request, Blueprint, redirect, url_for, flash
 from flask_login import login_required, current_user
 from Bookflix.decorators import full_login_required 
 from Bookflix.models import News, User, Profile, Book, Publisher, Genre, Author, Chapter
@@ -45,6 +45,9 @@ def search_results(query):
 @full_login_required()
 def book(id):
     theBook = Book.query.get_or_404(id)
+    if (current_user.accountType != 'Admin' and theBook.public == False):
+        flash('Este libro todavia no esta disponible.', 'info')
+        return redirect(url_for('main.home'))
     saveBookHistory(name=theBook.full_name(),entryType='Book', id=id)
     return render_template('book.html', book=theBook)
 
@@ -54,6 +57,9 @@ def chapter(chapter_id):
     theChapter = Chapter.query.get_or_404(chapter_id)
     theBook = Book.query.get_or_404(theChapter.book_id)
     theName = theBook.full_name() + ' - ' + theChapter.full_name()
+    if (current_user.accountType != 'Admin' and theBook.public == False):
+        flash('Este libro todavia no esta disponible.', 'info')
+        return redirect(url_for('main.home'))
     saveBookHistory(name=theName, entryType='Chapter', id=chapter_id)
     return render_template('chapter.html', book=theBook, chapter=theChapter)
 
