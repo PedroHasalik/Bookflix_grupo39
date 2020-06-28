@@ -39,5 +39,9 @@
             {% for chapter in book.chapters %}
                 <p><a href="{{ url_for('main.chapter', chapter_id=chapter.id)}}">{{ chapter.chapterNumber}} - {{ chapter.chapterTitle }}</a></p>
             {% endfor %}
+
+            <p class="btn btn-outline-info" href="">Agregar a {{ book.theAuthor.full_name()}} a Favoritos</p>
+            <p class="btn btn-outline-info" href="">Agregar género a Favoritos</p>
+            <p class="btn btn-outline-info" href="">Agregar este libro a Favoritos</p>
     </article>
 {% endblock content %}
