@@ -4,6 +4,6 @@
     <div class="content-section">
         <a class="btn btn-outline-info" href="{{url_for('users.update_profile')}}">Modificar Perfil</a>
         <a class="btn btn-outline-info" href="{{url_for('users.history')}}">Ver historial</a>
-        <a class="btn btn-outline-info" href="">Ver Favoritos</a>
+        <a class="btn btn-outline-info" href="{{ url_for('users.favourites')}}">Ver Favoritos</a>
     </div>
 {% endblock content %}

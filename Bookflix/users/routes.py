@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint, session
 from flask_login import login_user, current_user, logout_user, login_required
 from Bookflix.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm, ProfileRegistrationForm, ProfileUpdateForm)
-from Bookflix.models import User, Card, Profile, NavigationHistoryEntry
+from Bookflix.models import User, Card, Profile, NavigationHistoryEntry, Book
 from Bookflix import bcrypt, db
 from Bookflix.users.utils import save_picture
 from Bookflix.decorators import full_login_required
@@ -131,3 +131,29 @@ def history():
 @users.route("/debug")
 def debug():
     return render_template('debug.html', current_user=current_user)
+
+
+@users.route("/favourites")
+@full_login_required()
+def favourites():
+    #favs = profile.profile_favourites()
+    return render_template('favs.html', favs=favs)
+
+
+@users.route("/add_fav")
+@full_login_required()
+def add_favourite(book_id):
+
+    bookF = ProfileFavourites.query.filter_by(id=book_id)
+
+    #Agregar libro a favoritos
+
+@users.route("")
+@full_login_required()
+def delete_favourite(book_id):
+
+    bookF = ProfileFavourites.query.filter_by(id=book_id) #No estoy seguro de como llamar al libro en este caso aún
+
+    #Eliminar libro de favoritos
+
+
