@@ -29,10 +29,10 @@ class Profile(db.Model):
     name=db.Column(db.String(50),unique=True, nullable = False)
     image_file = db.Column(db.String(20), nullable = False, default='default.png')
     navigationHistory = db.relationship('NavigationHistoryEntry', lazy = True, backref='owner')
-    #favourites=db.relationship('Book',lazy = True) VA A SER UN QUILOMBO IMPLEMENTAR ESTO. NOTA: probablemente se solucione implementandolo como many-to-many
+    favourites=db.relationship('Book', secondary = 'profile_favorites' )
     #pending=db.relationship('Book',lazy = True)
     #doneReading=db.relationship('Book',lazy = True)
-    #reviews=db.relationship('Review', backref='writer',lazy = True)
+    reviews=db.relationship('Review', backref='writer',lazy = True)
 
 class NavigationHistoryEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -94,7 +94,7 @@ class Book(db.Model):
     public = db.Column(db.Boolean, nullable = False, default=False)
 
 
-    #reviews=db.relationship('Review',lazy = True)
+    reviews=db.relationship('Review',lazy = True, backref='book')
     chapters=db.relationship('Chapter', lazy = True, backref='book')
 
     def full_name(self):
@@ -102,7 +102,7 @@ class Book(db.Model):
 
 class Chapter(db.Model):
     id=db.Column(db.Integer, primary_key = True)
-    book_id= db.Column(db.Integer, db.ForeignKey('book.id'), nullable = False)
+    book_id= db.Column(db.Integer, db.ForeignKey('book.id',  ondelete='CASCADE'), nullable = False,)
 
     chapterNumber = db.Column(db.Integer, nullable = False)
     chapterTitle = db.Column(db.String)
@@ -111,15 +111,15 @@ class Chapter(db.Model):
     def full_name(self):
         return ('Capitulo '+str(self.chapterNumber)+' - '+self.chapterTitle)
 
-'''
+
 class Review(db.Model):
     id=db.Column(db.Integer, primary_key = True)
-    author_id= db.Column(db.Integer, db.ForeignKey('profile.id'), nullable = False)
-    book_id= db.Column(db.Integer, db.ForeignKey('book.id'), nullable = False)
+    writer_id= db.Column(db.Integer, db.ForeignKey('profile.id',  ondelete='CASCADE'), nullable = False)
+    book_id= db.Column(db.Integer, db.ForeignKey('book.id',  ondelete='CASCADE'), nullable = False)
 
     score=db.Column(db.Integer, nullable= False)
     text=db.Column(db.Text, nullable= True)
-'''
+
 
 class News(db.Model):
     id =db.Column(db.Integer, primary_key=True)
@@ -132,6 +132,17 @@ class News(db.Model):
 
     def full_name(self):
         return self.title
+
+
+
+#MANY-TO-MANY RELATIONSHIP HELPERS
+
+class ProfileFavorites(db.Model):
+    __tablename__= 'profile_favorites'
+    id = db.Column(db.Integer(), primary_key=True)
+    profile_id = db.Column(db.Integer(), db.ForeignKey('profile.id', ondelete='CASCADE'))
+    book_id = db.Column(db.Integer(), db.ForeignKey('book.id', ondelete='CASCADE'))
+
 
 
 
