@@ -42,6 +42,7 @@
 
             <p class="btn btn-outline-info" href="">Agregar a {{ book.theAuthor.full_name()}} a Favoritos</p>
             <p class="btn btn-outline-info" href="">Agregar género a Favoritos</p>
-            <p class="btn btn-outline-info" href="{{ url_for('users.add_favourites', book_id=book.id)}}">Agregar este libro a Favoritos</p>
+            <p class="btn btn-outline-info" href="{{ url_for('users.add_favourite', book_id=book.id)}}">Agregar este libro a Favoritos</p>
+            <p class="btn btn-outline-info"><a href="{{ url_for('main.review', id=book.id )}}">Crear reseña</a></p>
     </article>
 {% endblock content %}

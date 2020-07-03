@@ -1,9 +1,10 @@
 from flask import render_template, request, Blueprint, redirect, url_for, flash
 from flask_login import login_required, current_user
 from Bookflix.decorators import full_login_required 
-from Bookflix.models import News, User, Profile, Book, Publisher, Genre, Author, Chapter
-from Bookflix.main.forms import SearchForm
+from Bookflix.models import News, User, Profile, Book, Publisher, Genre, Author, Chapter, Review
+from Bookflix.main.forms import SearchForm, ReviewForm
 from Bookflix.users.utils import saveBookHistory
+from Bookflix import db
 
 main = Blueprint('main', __name__)
 
@@ -62,6 +63,20 @@ def chapter(chapter_id):
         return redirect(url_for('main.home'))
     saveBookHistory(name=theName, entryType='Chapter', id=chapter_id)
     return render_template('chapter.html', book=theBook, chapter=theChapter)
+
+
+@main.route('/write_review/<id>',  methods=['GET', 'POST'])
+@full_login_required()
+def review(id):
+    book = Book.query.get_or_404(id)
+    form = ReviewForm()
+    if (form.validate_on_submit):
+        review = Review(writer = current_user.current_profile() , book= book , score = form.score.data, text = form.text.data)
+        db.session.add(review)
+        db.session.commit()
+        flash('Se ha publicado la reseña', 'success')
+        return redirect (url_for('main.book' , id=id))
+    return render_template('review.html', form=form, legend="Reseña" )
 
 
 

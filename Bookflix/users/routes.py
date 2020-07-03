@@ -148,6 +148,7 @@ def add_favourite(book_id):
 
     #Agregar libro a favoritos
 
+'''
 @users.route("")
 @full_login_required()
 def delete_favourite(book_id):
@@ -156,4 +157,4 @@ def delete_favourite(book_id):
 
     #Eliminar libro de favoritos
 
-
+'''
