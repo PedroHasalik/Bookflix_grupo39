@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 {% block content  %}
-    <h3>Favoritos de {{ profile }}</h3>
+    <h3>Favoritos de {{ profile.name }}</h3>
     <div class="content-section">
         <ul>
             {% for item in favs%}
-               <!-- Nombre del libro on href al libro mismo -->
-               <!-- <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('users.delete_favourite', book_id=book.id)}}">Eliminar de la lista</a> -->
+                <a href=" {{url_for('main.book', id=item.id)}}"> {{item.full_name()}}</a>
+                <a class="btn btn-secondary btn-sm m-1" href="{{ url_for('users.delete_favourite', id=item.id)}}">Eliminar de la lista</a>
             {% endfor %}
         </ul>
     </div>

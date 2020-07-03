@@ -136,25 +136,36 @@ def debug():
 @users.route("/favourites")
 @full_login_required()
 def favourites():
-    #favs = profile.profile_favourites()
-    return render_template('favs.html', favs=favs)
+    favs = current_user.current_profile().favourites
+    return render_template('favs.html', favs=favs, profile=current_user.current_profile())
 
 
-@users.route("/add_fav")
+@users.route("/add_fav/<int:id>")
 @full_login_required()
-def add_favourite(book_id):
+def add_favourite(id):
 
-    bookF = ProfileFavourites.query.filter_by(id=book_id)
+    bookF = Book.query.get_or_404(id)
 
-    #Agregar libro a favoritos
+    profile = current_user.current_profile()
+    if bookF not in profile.favourites:
+        profile.favourites.append(bookF)
+        db.session.commit()
+        flash('{} ha sido agregado a Favoritos.'.format(bookF.full_name()), 'success')
+    else:
+        flash('{} ya está en Favoritos.'.format(bookF.full_name()), 'danger')
 
-'''
-@users.route("")
+    return redirect(url_for('main.book', id=id))
+
+    
+
+@users.route("/delete_favourite/<int:id>")
 @full_login_required()
-def delete_favourite(book_id):
+def delete_favourite(id):
 
-    bookF = ProfileFavourites.query.filter_by(id=book_id) #No estoy seguro de como llamar al libro en este caso aún
+    bookF = Book.query.get_or_404(id)
 
-    #Eliminar libro de favoritos
-
-'''
+    profile = current_user.current_profile()
+    profile.favourites.remove(bookF)
+    db.session.commit()
+    flash('{} ha sido eliminado de Favoritos.'.format(bookF.full_name()), 'info')
+    return redirect (url_for('users.favourites'))
