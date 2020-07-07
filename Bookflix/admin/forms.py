@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
+from wtforms.fields.html5 import DateField
 from wtforms import StringField, SubmitField, SelectField, TextAreaField, IntegerField, BooleanField
 from wtforms.validators import DataRequired, ValidationError
 from Bookflix.models import Genre, Publisher, Book, Chapter
@@ -127,3 +128,15 @@ class ChapterUpdateForm(FlaskForm):
 
 class ConfirmDeleteForm(FlaskForm):
     submit = SubmitField('ELIMINAR')
+
+class StatDateForm(FlaskForm):
+    fromDate = DateField('DESDE' ,format='%Y-%m-%d' ,validators=[DataRequired()])
+    toDate = DateField('HASTA' ,format='%Y-%m-%d' ,validators=[DataRequired()])
+    estadisticaDe = SelectField('Estadistica de', choices=[('admin.admin_stats_book', 'Libros leidos'), ('admin.admin_stats_accounts', 'Cuentas Creadas')])
+
+    submit = SubmitField('Ver estadisticas')
+
+    def validate_toDate(self, toDate):
+        fromDate = self.fromDate
+        if (toDate.data < fromDate.data):
+            raise ValidationError("La fecha 'DESDE' tiene que ser antes o igual que la fecha 'HASTA'.")

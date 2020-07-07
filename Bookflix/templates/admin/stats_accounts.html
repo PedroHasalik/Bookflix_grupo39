@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h5 class="mb-3">{{title}}</h5>
+    <h1>{{cantidad}}</h1>
+    <div class = "content-section">
+        <a class="btn btn-outline-info" href="{{ url_for('admin.admin_dashboard') }}">Admin menu</a>
+        <a class="btn btn-outline-info" href="{{ url_for('admin.admin_stats') }}">Estadisticas</a>
+    </div>
+{% endblock content %}

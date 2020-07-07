@@ -1,8 +1,8 @@
 from flask import render_template, request, Blueprint, flash, redirect, url_for
 from Bookflix import db
 from Bookflix.decorators import full_login_required, admin_required
-from Bookflix.models import Book, Author, Genre, Publisher, News, Genre, Chapter
-from Bookflix.admin.forms import GenreForm, AuthorForm, PublisherForm, BookForm, NewsForm, GenreUpdateForm, PublisherUpdateForm, BookUpdateForm, ConfirmDeleteForm, ChapterForm, ChapterUpdateForm
+from Bookflix.models import Book, Author, Genre, Publisher, News, Genre, Chapter, NavigationHistoryEntry, User
+from Bookflix.admin.forms import GenreForm, AuthorForm, PublisherForm, BookForm, NewsForm, GenreUpdateForm, PublisherUpdateForm, BookUpdateForm, ConfirmDeleteForm, ChapterForm, ChapterUpdateForm, StatDateForm
 from Bookflix.admin.utils import save_picture, save_chapter, save_book_picture
 
 
@@ -20,6 +20,47 @@ admin = Blueprint('admin', __name__)
 def admin_dashboard():
         return render_template('admin/admin.html', title='Admin page')
 
+#ESTADISTICAS
+@admin.route("/admin/stats", methods=['GET', 'POST'])
+@admin_required()
+def admin_stats():
+        form = StatDateForm()
+        if form.validate_on_submit():
+
+                return redirect(url_for(form.estadisticaDe.data, fromDate = form.fromDate.data, toDate = form.toDate.data))
+        return render_template('admin/stats.html', title='Estadisticas', form=form, legend='Especifique que estadisticas quiere observar')
+
+@admin.route("/admin/stats/books-read?<fromDate>&<toDate>")
+@admin_required()
+def admin_stats_book(fromDate, toDate):
+        reads_between_dates = NavigationHistoryEntry.query.filter((NavigationHistoryEntry.date_posted-1 <= toDate) & (fromDate <= NavigationHistoryEntry.date_posted)).all() #Le resto 1 en la comparacion a toDate para que tambien cuente las ocurrencias EN toDate
+        book_list = list()
+        for entry in reads_between_dates:
+                if (entry.entryType == 'Book'):
+                        book_list.append(Book.query.get(entry.item_id))
+        no_duplicates = list(set(book_list))
+        no_duplicates.sort(key=book_list.count, reverse=True)
+        return render_template('admin/stats_book.html', title='Estadisticas de libros leidos entre '+fromDate+' y '+toDate, libros=no_duplicates, full_list = book_list)
+
+
+@admin.route("/admin/stats/accounts-created?<fromDate>&<toDate>")
+@admin_required()
+def admin_stats_accounts(fromDate, toDate):
+        accounts_created = User.query.filter((User.date_created-1 <= toDate) & (fromDate <= User.date_created)).all() #Le resto 1 en la comparacion a toDate para que tambien cuente las ocurrencias EN toDate
+        return render_template('admin/stats_accounts.html', title='Cantidad de cuentas creadas entre '+fromDate+' y '+toDate+':', cantidad = len(accounts_created))
+
+
+
+
+
+
+
+
+
+
+
+
+#BASE DE DATOS
 
 #LISTAR las cosas de la base de datos.
 @admin.route("/admin/genres")

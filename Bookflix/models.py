@@ -14,6 +14,7 @@ class User(db.Model, UserMixin):
     password=db.Column(db.String(60), nullable = False)
     accountType=db.Column(db.String, nullable = False) #valores posibles: 'Admin', 'Premium', 'Normal'
     name=db.Column(db.String(60), nullable = False)
+    date_created= db.Column(db.DateTime, nullable = False, default=datetime.utcnow)
 
     card=db.relationship('Card', backref='owner', lazy = True)
     profiles=db.relationship('Profile', backref='owner', lazy = True )
@@ -39,7 +40,7 @@ class NavigationHistoryEntry(db.Model):
     profile_id = db.Column(db.Integer, db.ForeignKey('profile.id'), nullable = False)
     item_id = db.Column(db.Integer, nullable = False) #id del libro o capitulo a guardar en el historial
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    entryType = db.Column(db.String, nullable = False) #book o chapter
+    entryType = db.Column(db.String, nullable = False) #Book o Chapter
     entryName = db.Column(db.String, nullable = False) #El nombre del libro o el numero y nombre del capitulo
 
 class Card(db.Model):

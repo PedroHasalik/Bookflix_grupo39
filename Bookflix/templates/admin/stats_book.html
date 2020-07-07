@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h3 class="mb-3">{{title}} ({{ libros|length }})</h3>
+    <article class="media content-section">
+        <div class="media-body">
+    {% for item in libros %}
+                <!--<p class="article-metadata">{{ item.entryName}}</p>-->
+                <p class="article-metadata">{{ item.full_name()}} ({{full_list.count(item)}})</p>              
+    {% endfor %}
+        </div>
+    </article>
+
+    <div class = "content-section">
+        <a class="btn btn-outline-info" href="{{ url_for('admin.admin_dashboard') }}">Admin menu</a>
+        <a class="btn btn-outline-info" href="{{ url_for('admin.admin_stats') }}">Estadisticas</a>
+    </div>
+{% endblock content %}
