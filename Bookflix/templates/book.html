@@ -39,8 +39,14 @@
             {% for chapter in book.chapters %}
                 <p><a href="{{ url_for('main.chapter', chapter_id=chapter.id)}}">{{ chapter.chapterNumber}} - {{ chapter.chapterTitle }}</a></p>
             {% endfor %}
-
-            <p class="btn btn-outline-info"><a href="{{ url_for('users.add_favourite', id=book.id)}}">Agregar este libro a Favoritos</a></p>
-            <p class="btn btn-outline-info"><a href="{{ url_for('main.review', id=book.id )}}">Crear reseña</a></p>
+        
+            <p><a class="btn btn-outline-info" href="{{ url_for('users.add_favourite', id=book.id)}}">Agregar este libro a Favoritos</a>
+            <a class="btn btn-outline-info" href="{{ url_for('main.review', id=book.id )}}">Crear reseña</a>
+            {% if alreadyRead %}
+                <a  class="btn btn-outline-danger" href="{{ url_for('users.unread', id=book.id) }}">Desmarcar libro como leido</a></p>
+            {% else %}
+                <a  class="btn btn-outline-info" href="{{ url_for('users.read', id=book.id) }}">Marcar libro como leido</a></p>
+            {% endif %}
+        </div>
     </article>
 {% endblock content %}

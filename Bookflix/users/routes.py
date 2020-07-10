@@ -169,3 +169,21 @@ def delete_favourite(id):
     db.session.commit()
     flash('{} ha sido eliminado de Favoritos.'.format(bookF.full_name()), 'info')
     return redirect (url_for('users.favourites'))
+
+@users.route("/read/<id>")
+@full_login_required()
+def read(id):
+    theBook = Book.query.get_or_404(id)
+    profile = current_user.current_profile()
+    profile.markAsRead(theBook)
+    flash('El libro ha sido marcado como leido.', 'info')
+    return redirect(url_for('main.book', id=id))
+
+@users.route("/unread/<id>")
+@full_login_required()
+def unread(id):
+    theBook = Book.query.get_or_404(id)
+    profile = current_user.current_profile()
+    profile.unread(theBook)
+    flash('El libro ya no esta marcado como leido.', 'info')
+    return redirect(url_for('main.book', id=id))

@@ -30,10 +30,19 @@ class Profile(db.Model):
     name=db.Column(db.String(50),unique=True, nullable = False)
     image_file = db.Column(db.String(20), nullable = False, default='default.png')
     navigationHistory = db.relationship('NavigationHistoryEntry', lazy = True, backref='owner')
-    favourites=db.relationship('Book', secondary = 'profile_favorites' )
-    #pending=db.relationship('Book',lazy = True)
-    #doneReading=db.relationship('Book',lazy = True)
+    favourites=db.relationship('Book', secondary = 'profile_favorites' ) #libros favoritos
+    doneReading=db.relationship('Book', secondary = 'profile_done_reading') #libros leidos
     reviews=db.relationship('Review', backref='writer',lazy = True)
+
+    def markAsRead(self, theBook):
+        if not (theBook in self.doneReading):
+            self.doneReading.append(theBook)
+            db.session.commit()
+    
+    def unread(self, theBook):
+        if (theBook in self.doneReading):
+            self.doneReading.remove(theBook)
+            db.session.commit()
 
 class NavigationHistoryEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -140,6 +149,12 @@ class News(db.Model):
 
 class ProfileFavorites(db.Model):
     __tablename__= 'profile_favorites'
+    id = db.Column(db.Integer(), primary_key=True)
+    profile_id = db.Column(db.Integer(), db.ForeignKey('profile.id', ondelete='CASCADE'))
+    book_id = db.Column(db.Integer(), db.ForeignKey('book.id', ondelete='CASCADE'))
+
+class ProfileDoneReading(db.Model):
+    __tablename__= 'profile_done_reading'
     id = db.Column(db.Integer(), primary_key=True)
     profile_id = db.Column(db.Integer(), db.ForeignKey('profile.id', ondelete='CASCADE'))
     book_id = db.Column(db.Integer(), db.ForeignKey('book.id', ondelete='CASCADE'))

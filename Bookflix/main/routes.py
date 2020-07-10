@@ -49,8 +49,9 @@ def book(id):
     if (current_user.accountType != 'Admin' and theBook.public == False):
         flash('Este libro todavia no esta disponible.', 'info')
         return redirect(url_for('main.home'))
+    
     saveBookHistory(name=theBook.full_name(),entryType='Book', id=id)
-    return render_template('book.html', book=theBook)
+    return render_template('book.html', book=theBook, alreadyRead = (theBook in current_user.current_profile().doneReading))
 
 @main.route('/chapter/<chapter_id>')
 @full_login_required()
@@ -62,6 +63,10 @@ def chapter(chapter_id):
         flash('Este libro todavia no esta disponible.', 'info')
         return redirect(url_for('main.home'))
     saveBookHistory(name=theName, entryType='Chapter', id=chapter_id)
+
+    lastChapter = Chapter.query.filter_by(book_id = theBook.id).order_by(Chapter.chapterNumber.desc()).first()
+    if (lastChapter == theChapter):
+        current_user.current_profile().markAsRead(theBook)
     return render_template('chapter.html', book=theBook, chapter=theChapter)
 
 
