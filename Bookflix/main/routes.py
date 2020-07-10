@@ -51,7 +51,13 @@ def book(id):
         return redirect(url_for('main.home'))
     
     saveBookHistory(name=theBook.full_name(),entryType='Book', id=id)
-    return render_template('book.html', book=theBook, alreadyRead = (theBook in current_user.current_profile().doneReading))
+    aux=current_user.current_profile().reviews
+    isreviewed = False
+    for each in aux:
+        if each.book_id == theBook.id:
+            isreviewed = True
+            break
+    return render_template('book.html', book=theBook, alreadyRead = (theBook in current_user.current_profile().doneReading), isreviewed=isreviewed)
 
 @main.route('/chapter/<chapter_id>')
 @full_login_required()
@@ -75,14 +81,20 @@ def chapter(chapter_id):
 def review(id):
     book = Book.query.get_or_404(id)
     form = ReviewForm()
-    if (form.validate_on_submit):
+    if form.validate_on_submit():
         review = Review(writer = current_user.current_profile() , book= book , score = form.score.data, text = form.text.data)
         db.session.add(review)
         db.session.commit()
-        flash('Se ha publicado la reseña', 'success')
+        flash('Se ha publicado la reseña', 'success') 
         return redirect (url_for('main.book' , id=id))
     return render_template('review.html', form=form, legend="Reseña" )
 
+@main.route('/see_reviews/<id>',  methods=['GET', 'POST'])
+@full_login_required()
+def see_reviews(id):
+   book = Book.query.get_or_404(id) 
+   reviews = book.reviews 
+   return render_template('show_reviews.html', reviews=reviews)
 
 
 

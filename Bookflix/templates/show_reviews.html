@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for review in reviews %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <small class="text-muted">{{ review.writer.name }}</small>
+            </div>
+            <h3>Puntaje: {{review.score}}</h3>
+            <p class="article-content">{{ review.text }}</p>
+          </div>
+        </article>
+    {% endfor %}
+{% endblock content %}

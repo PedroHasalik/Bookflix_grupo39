@@ -41,7 +41,10 @@
             {% endfor %}
         
             <p><a class="btn btn-outline-info" href="{{ url_for('users.add_favourite', id=book.id)}}">Agregar este libro a Favoritos</a>
-            <a class="btn btn-outline-info" href="{{ url_for('main.review', id=book.id )}}">Crear reseña</a>
+            <a class="btn btn-outline-info" href="{{ url_for('main.see_reviews',  id=book.id )}}">Ver reseñas</a>
+            {% if not isreviewed and alreadyRead%}
+                   <a class="btn btn-outline-info" href="{{ url_for('main.review', id=book.id )}}">Crear reseña</a>
+            {% endif %}
             {% if alreadyRead %}
                 <a  class="btn btn-outline-danger" href="{{ url_for('users.unread', id=book.id) }}">Desmarcar libro como leido</a></p>
             {% else %}

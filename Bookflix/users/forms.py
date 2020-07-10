@@ -35,7 +35,7 @@ class UpdateAccountForm(FlaskForm):
     number = IntegerField('CardNumber', validators=[DataRequired()])
     expDate = DateField('ExpDate' ,format='%Y-%m-%d' ,validators=[DataRequired()])
     securityNum =  IntegerField( 'SecurityNumber' , validators=[DataRequired()])                                           
-    password = PasswordField('Password', validators=[DataRequired()])
+    #password = PasswordField('Password', validators=[DataRequired()])
     userType =  RadioField('UserType', choices=[('Premium','Premium'),('Normal','Normal')])
     submit = SubmitField('Update')
 

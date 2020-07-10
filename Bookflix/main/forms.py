@@ -8,5 +8,5 @@ class SearchForm(FlaskForm):
 
 class ReviewForm(FlaskForm):
     text = TextAreaField('Texto', [DataRequired()])
-    score =  RadioField('Puntaje', choices=[(1,'1'),(2,'2'),(3,'3'),(4,'4'),(5,'5')] ,validators=[DataRequired()])
+    score =  RadioField('Puntaje', choices=[(1,'1'),(2,'2'),(3,'3'),(4,'4'),(5,'5')],coerce=int ,validators=[DataRequired()])
     submit = SubmitField('Publicar')

@@ -7,6 +7,7 @@ from Bookflix.config import Config
 
 
 
+
 db = SQLAlchemy() 
 bcrypt = Bcrypt()
 login_manager = LoginManager()
@@ -21,7 +22,7 @@ def create_app(config_class = Config):
     db.init_app(app)
     bcrypt.init_app(app)
     login_manager.init_app(app)
-    main.init_app(app)
+    mail.init_app(app)
 
     from Bookflix.users.routes import users
     from Bookflix.main.routes import main

@@ -54,10 +54,10 @@ def account():
     form = UpdateAccountForm()
     card=Card.query.filter_by(owner=current_user).first()
     if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        #hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         current_user.name = form.name.data
         current_user.email = form.email.data
-        current_user.password= hashed_password
+        #current_user.password= hashed_password
         current_user.accountType= form.userType.data
         card.number= form.number.data
         card.security_number = form.securityNum.data
@@ -68,7 +68,7 @@ def account():
     elif request.method == 'GET':
         form.name.data = current_user.name
         form.email.data = current_user.email
-        form.password.data = current_user.password
+        #form.password.data = current_user.password
         form.number.data = card.number
         form.userType.data = current_user.accountType
         form.securityNum.data = card.security_number
@@ -193,20 +193,16 @@ def unread(id):
 
 @users.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():
-    if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
     form = RequestResetForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         send_reset_email(user)
-        flash('An email has been sent with instructions to reset your password.', 'info')
+        flash('Un mail se ha enviado con la informacion para recuperar la contraseña.', 'info')
         return redirect(url_for('users.login'))
-    return render_template('reset_request.html', title='Reset Password', form=form)
+    return render_template('reset_request.html', title='Recuperar Contraseña', form=form)
 
 @users.route("/reset_password/<token>", methods=['GET', 'POST'])
 def reset_token(token):
-    if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
     user = User.verify_reset_token(token)
     if user is None:
         flash('That is an invalid or expired token', 'warning')
