@@ -54,10 +54,10 @@ def account():
     form = UpdateAccountForm()
     card=Card.query.filter_by(owner=current_user).first()
     if form.validate_on_submit():
-        #hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         current_user.name = form.name.data
         current_user.email = form.email.data
-        #current_user.password= hashed_password
+        current_user.password= hashed_password
         current_user.accountType= form.userType.data
         card.number= form.number.data
         card.security_number = form.securityNum.data
