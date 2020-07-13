@@ -1,7 +1,17 @@
-{% extends "layout_select_profile.html" %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ title }}</title>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='profiles.css') }}">
+</head>
+
+<div class="logo"></div> <a  href="{{url_for('users.account')}}">Editar Perfil</a>
+
+<body>
 	<div class="wrapper">
-		<h1 class="blurb">¿Quién está leyendo?</h1>
+		<h1 class="blurb">Quién está leyendo?</h1>
 		{% for profile in profiles %}
 			<div class="profile">
 				<a class="profile-icon profile4" href="{{url_for('users.set_profile', id=profile.id)}}">
@@ -32,4 +42,10 @@
 			{% endif %}
 		{% endif %}
 	</div>
-{% endblock content %}
+	{% if profiles|length > 0 %}
+		</div>
+			<a href="#" target="_blank" class="gestion">Gestionar perfiles</a> <a  href="{{url_for('users.logout')}}">cerrar sesion</a>
+
+		</div>
+	{% endif %}
+</body>

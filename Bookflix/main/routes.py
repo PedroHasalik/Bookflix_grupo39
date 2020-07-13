@@ -79,10 +79,14 @@ def chapter(chapter_id):
 @main.route('/write_review/<id>',  methods=['GET', 'POST'])
 @full_login_required()
 def review(id):
+    user_aux = current_user.current_profile()
     book = Book.query.get_or_404(id)
+    if  not (user_aux.doneReading):
+        flash('No se puede escribir una reseña de un libro que no leiste', 'danger') 
+        return redirect (url_for('main.book' , id=id)) 
     form = ReviewForm()
     if form.validate_on_submit():
-        review = Review(writer = current_user.current_profile() , book= book , score = form.score.data, text = form.text.data)
+        review = Review(writer = user_aux , book= book , score = form.score.data, text = form.text.data)
         db.session.add(review)
         db.session.commit()
         flash('Se ha publicado la reseña', 'success') 
