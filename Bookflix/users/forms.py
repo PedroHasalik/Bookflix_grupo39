@@ -23,7 +23,7 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('La direccion de mail esta en uso. Por favor seleccione otra.')
 
 class LoginForm(FlaskForm):
-    email = StringField('email',validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('email',validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
