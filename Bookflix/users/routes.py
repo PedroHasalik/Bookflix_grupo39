@@ -1,9 +1,9 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint, session
 from flask_login import login_user, current_user, logout_user, login_required
-from Bookflix.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm, ProfileRegistrationForm, ProfileUpdateForm, RequestResetForm)
+from Bookflix.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm, ProfileRegistrationForm, ProfileUpdateForm, RequestResetForm, ResetPasswordForm)
 from Bookflix.models import User, Card, Profile, NavigationHistoryEntry, Book
 from Bookflix import bcrypt, db
-from Bookflix.users.utils import save_picture
+from Bookflix.users.utils import save_picture, send_reset_email
 from Bookflix.decorators import full_login_required
 
 users = Blueprint('users', __name__)
