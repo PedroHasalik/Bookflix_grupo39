@@ -118,8 +118,8 @@ class Book(db.Model):
     public = db.Column(db.Boolean, nullable = False, default=False)
 
 
-    reviews=db.relationship('Review',lazy = True, backref='book', cascade="all, delete-orphan"))
-    chapters=db.relationship('Chapter', lazy = True, backref='book', cascade="all, delete-orphan"))
+    reviews=db.relationship('Review',lazy = True, backref='book', cascade="all, delete-orphan")
+    chapters=db.relationship('Chapter', lazy = True, backref='book', cascade="all, delete-orphan")
 
     def full_name(self):
         return self.title
