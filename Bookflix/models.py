@@ -18,7 +18,7 @@ class User(db.Model, UserMixin):
     date_created= db.Column(db.DateTime, nullable = False, default=datetime.utcnow)
 
     card=db.relationship('Card', backref='owner', lazy = True)
-    profiles=db.relationship('Profile', backref='owner', lazy = True )
+    profiles=db.relationship('Profile', backref='owner', lazy = True)
 
     def current_profile(self):
         return Profile.query.get(session['_current_profile_id'])
@@ -118,8 +118,8 @@ class Book(db.Model):
     public = db.Column(db.Boolean, nullable = False, default=False)
 
 
-    reviews=db.relationship('Review',lazy = True, backref='book')
-    chapters=db.relationship('Chapter', lazy = True, backref='book')
+    reviews=db.relationship('Review',lazy = True, backref='book', cascade="all, delete-orphan"))
+    chapters=db.relationship('Chapter', lazy = True, backref='book', cascade="all, delete-orphan"))
 
     def full_name(self):
         return self.title
