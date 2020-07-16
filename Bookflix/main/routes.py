@@ -84,6 +84,16 @@ def review(id):
     if  not (user_aux.doneReading):
         flash('No se puede escribir una reseña de un libro que no leiste', 'danger') 
         return redirect (url_for('main.book' , id=id)) 
+    saveBookHistory(name=book.full_name(),entryType='Book', id=id)
+    aux=current_user.current_profile().reviews
+    isreviewed = False
+    for each in aux:
+        if each.book_id == book.id:
+            isreviewed = True
+            break
+    if (isreviewed):
+        flash('Solo se puede escribir una reseña por libro', 'danger') 
+        return redirect (url_for('main.book' , id=id))
     form = ReviewForm()
     if form.validate_on_submit():
         review = Review(writer = user_aux , book= book , score = form.score.data, text = form.text.data)
